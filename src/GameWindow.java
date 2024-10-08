@@ -13,9 +13,7 @@ public class GameWindow extends JPanel
     //Game Loop Variables
     private Thread gameThread;
     private boolean running = false;
-    //Frames and time of loop
-    private int FPS = 60;
-    private long TargetTime = 1000 / FPS;
+    Ball golfBall;
 
     public GameWindow() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -32,14 +30,26 @@ public class GameWindow extends JPanel
 
     @Override
     public void run() {
+        //Frames and time of loop
+        final double FPS = 60.0;
+        final double TargetTime = 1e9 / FPS;
+
+        long startTime = System.nanoTime();
+        double elapsed = 0;
+
         // * Game Loop * //
-        double startTime = System.nanoTime();
         while (running) {
-            double current = System.nanoTime();
-            double elapsed = current - startTime;
-            processInput();
-            updateGame();
-            renderGame();
+            long currentTime = System.nanoTime();
+            elapsed += (currentTime - startTime) / TargetTime;
+            startTime = currentTime;
+
+            if (elapsed > 1) {
+                processInput();
+                updateGame();
+                renderGame();
+                elapsed--;
+                System.out.println("elapsed : " + elapsed + "start Time: " + startTime + "current Time: " + currentTime);
+            }
             
         }
     }
@@ -53,13 +63,19 @@ public class GameWindow extends JPanel
     }
 
     private void renderGame() {
-
     }
 
     @Override
     public void mouseClicked(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+        boolean ballPlaced = false;
+        int mouseX = e.getX();
+        int mouseY = e.getY();
+
+        if (!ballPlaced) {
+            golfBall = new Ball(mouseX,mouseY);
+        } else {
+            golfBall.setXY(mouseX, mouseY);
+        }
     }
 
     @Override
