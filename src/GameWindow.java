@@ -1,4 +1,6 @@
 import javax.swing.JPanel;
+
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -12,6 +14,8 @@ public class GameWindow extends JPanel implements Runnable {
 
     public GameWindow() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
+        this.setBackground(Color.ORANGE);
+        this.setDoubleBuffered(true);
         startGame();
     }
 
@@ -23,6 +27,18 @@ public class GameWindow extends JPanel implements Runnable {
 
     @Override
     public void run() {
+        // * Game Loop * //
+        while (running) {
+            System.out.println("The game loop is runnning!");
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateGame() {
         
     }
 
