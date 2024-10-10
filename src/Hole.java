@@ -3,10 +3,9 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 
 public class Hole {
-    
-    private double x;
-    private double y;
-    private final double radius = 13;
+    private double x;  // Position of the hole
+    private double y;  // Added y position
+    private static final double radius = 13; // Changed to constant, only one instance
 
     public Hole(int level) {
         if (level == 1) {
@@ -24,10 +23,20 @@ public class Hole {
         }
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public int getRadius() {
+        return (int) radius;  // Return radius as an integer
+    }
+
     public void draw(Graphics2D g2d) {
         g2d.setColor(Color.BLACK);
-        g2d.fill(new Ellipse2D.Double(x - radius, y - radius, radius * 2 , radius * 2));
+        g2d.fill(new Ellipse2D.Double(x - radius, y - radius, radius * 2, radius * 2));
     }
 }
-
-

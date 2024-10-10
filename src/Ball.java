@@ -1,67 +1,72 @@
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
+import java.awt.Rectangle;
 
 public class Ball {
-    private double x;
-    private double y;
-    private double velocityX = 0;
-    private double velocityY = 0;
-    private final double radius = 9f;
-    private final double friction = 0.99;  //chiar 0.99  
-    private final double restitution = 0.8; //slow down after collision
+    private double x, y;
+    private double Xvelocity = 0;
+    private double Yvelocity = 0;
+    private final double radius = 10;
+    private final double friction = 0.99;
+    private final double gravity = 0.5;
 
-    public Ball(double x, double y){
+    public Ball(double x, double y) {
         this.x = x;
         this.y = y;
-        }
+    }
 
     public void update() {
-        x += velocityX; //adauga cat tragi de mouse velocitate
-        y += velocityY; //adauga cat tragi de mouse velocitate
+        x += Xvelocity; // Update x position based on velocity
+        y += Yvelocity; // Update y position based on velocity
+        Yvelocity += gravity; // Apply gravity
 
-        velocityX *= friction;
-        velocityY *= friction;
+        // Apply friction
+        Xvelocity *= friction;
+        Yvelocity *= friction;
 
-        if (x - radius < 0) {
-            x = radius;
-            velocityX = -velocityX * restitution;
-        } else if (x + radius > GameWindow.WIDTH) {
-            x = GameWindow.WIDTH - radius;
-            velocityX = -velocityX * restitution;
+        // Bounce off left and right walls
+        if (x - radius < 0 || x + radius > 800) {
+            Xvelocity = -Xvelocity; // Reverse x velocity
+            x = Math.max(radius, Math.min(x, 800 - radius)); // Keep ball within bounds
         }
 
-        if (y - radius < 0) {
-            y = radius;
-            velocityY = -velocityY * restitution;
-        } else if (y + radius > GameWindow.HEIGHT) {
-            y = GameWindow.HEIGHT - radius;
-            velocityY = -velocityY * restitution;
+        // Bounce off top and bottom walls
+        if (y - radius < 0 || y + radius > 600) {
+            Yvelocity = -Yvelocity; // Reverse y velocity
+            y = Math.max(radius, Math.min(y, 600 - radius)); // Keep ball within bounds
         }
-    
     }
 
     public void draw(Graphics2D g2d) {
         g2d.setColor(Color.WHITE);
-        g2d.fill(new Ellipse2D.Double(x - radius, y - radius, radius * 2 , radius * 2));
+        g2d.fill(new Ellipse2D.Double(x - radius, y - radius, radius * 2, radius * 2));
     }
 
-    public double getX() { 
-        return x; 
+    public double getX() {
+        return x;
     }
 
-    public double getY() { 
-        return y; 
+    public double getY() {
+        return y;
     }
 
-    public void setXY(double x, double y) { 
+    public int getRadius() {
+        return (int) radius;
+    }
+
+    public void setXY(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public void setVelocity(double velocityX, double velocityY) {
-        this.velocityX = velocityX;
-        this.velocityY = velocityY;
+    public void setVelocity(double Xvelocity, double Yvelocity) {
+        this.Xvelocity = Xvelocity;
+        this.Yvelocity = Yvelocity;
+    }
+
+    // Return the bounding box of the ball
+    public Rectangle getBounds() {
+        return new Rectangle((int) (x - radius), (int) (y - radius), (int) (radius * 2), (int) (radius * 2));
     }
 }
-
