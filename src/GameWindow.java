@@ -3,6 +3,7 @@ import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import javax.swing.JPanel;
+import java.awt.geom.Line2D;
 
 public class GameWindow extends JPanel 
     implements Runnable {
@@ -13,6 +14,7 @@ public class GameWindow extends JPanel
     private Thread gameThread;
     private boolean running = false;
     Ball golfBall;
+    MouseHandler mouseHandler;
 
     public GameWindow() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
@@ -21,8 +23,9 @@ public class GameWindow extends JPanel
         //Initialize GolfBall
         golfBall = new Ball(WIDTH/2, HEIGHT/2);
         //Start MouseListener and Handler
-        MouseHandler mouseHandler = new MouseHandler(golfBall);
+        mouseHandler = new MouseHandler(golfBall);
         this.addMouseListener(mouseHandler);
+        this.addMouseMotionListener(mouseHandler);
 
         startGame();
     }
@@ -80,7 +83,22 @@ public class GameWindow extends JPanel
     }
     
     protected void paintComponent(Graphics g) {
+        //Golf Ball
         super.paintComponent(g);
         golfBall.draw((Graphics2D) g);
+
+        //Trajectory Line    
+        if (mouseHandler.isDragging) {
+
+            Graphics2D g2d = (Graphics2D) g;
+
+            double deltaX = Math.abs(mouseHandler.pressX - mouseHandler.currentMouseX);
+            double deltaY = Math.abs(mouseHandler.pressY - mouseHandler.currentMouseY);
+            int colorValue = (int) Math.min(255, Math.max(0, (deltaX + deltaY) / 2));
+            g2d.setColor(new Color(colorValue, 0, 255 - colorValue));
+
+            Line2D trajectoryLine = new Line2D.Double(mouseHandler.pressX, mouseHandler.pressY, mouseHandler.currentMouseX, mouseHandler.currentMouseY);
+            g2d.draw(trajectoryLine);   
+        }
     }
 }

@@ -9,7 +9,7 @@ public class Main {
             window.setResizable(false);
             GameWindow gameWindow = new GameWindow();
             window.add(gameWindow);
-                window.pack();
+            window.pack();
             window.setLocationRelativeTo(null);
             window.setVisible(true);  
         });
