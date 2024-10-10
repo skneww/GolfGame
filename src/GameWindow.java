@@ -1,12 +1,10 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 
 public class GameWindow extends JPanel 
-    implements Runnable, MouseListener {
+    implements Runnable {
     //Window Size
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -33,24 +31,32 @@ public class GameWindow extends JPanel
         //Frames and time of loop
         final double FPS = 60.0;
         final double TargetTime = 1e9 / FPS;
-
-        long startTime = System.nanoTime();
-        double elapsed = 0;
+        double nextTime = System.nanoTime() + TargetTime;
 
         // * Game Loop * //
-        while (running) {
-            long currentTime = System.nanoTime();
-            elapsed += (currentTime - startTime) / TargetTime;
-            startTime = currentTime;
+        while (running) {  
+            processInput();
 
-            if (elapsed > 1) {
-                processInput();
-                updateGame();
-                renderGame();
-                elapsed--;
-                System.out.println("elapsed : " + elapsed + "start Time: " + startTime + "current Time: " + currentTime);
+            updateGame();
+
+            renderGame();
+
+            try {
+                double remainingTime = nextTime - System.nanoTime();
+                remainingTime /= 1000000;
+
+                if (remainingTime < 0 ) {
+                    remainingTime = 0;
+                }
+                System.out.println(remainingTime);
+
+                Thread.sleep((long) remainingTime);
+
+                nextTime += TargetTime;
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            
         }
     }
 
@@ -64,43 +70,5 @@ public class GameWindow extends JPanel
 
     private void renderGame() {
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        boolean ballPlaced = false;
-        int mouseX = e.getX();
-        int mouseY = e.getY();
-
-        if (!ballPlaced) {
-            golfBall = new Ball(mouseX,mouseY);
-        } else {
-            golfBall.setXY(mouseX, mouseY);
-        }
-    }
-
-    @Override
-    public void mousePressed(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
-    }
-
-    @Override
-    public void mouseReleased(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-    }
-
-    @Override
-    public void mouseEntered(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
-    }
-
-    @Override
-    public void mouseExited(MouseEvent e) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
-    }
-
     
 }
