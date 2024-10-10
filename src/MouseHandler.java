@@ -1,39 +1,31 @@
-
-import java.awt.event.MouseListener;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 
-public class MouseHandler implements MouseListener {
+public class MouseHandler extends MouseAdapter {
+  
+  private double pressX, pressY;
+  private Ball golfBall;
 
-  @Override
-  public void mouseClicked(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mouseClicked'");
+  public MouseHandler(Ball ball) {
+    this.golfBall = ball;
   }
 
-  @Override
+  @Override 
   public void mousePressed(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mousePressed'");
+    pressX = e.getX();
+    pressY = e.getY();
   }
 
   @Override
   public void mouseReleased(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mouseReleased'");
-  }
+    double releaseX = e.getX();
+    double releaseY = e.getY();
 
-  @Override
-  public void mouseEntered(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mouseEntered'");
-  }
+    //Calculate velocity
+    double velocityX = (pressX - releaseX) * 0.1;
+    double velocityY = (pressY - releaseY) * 0.1;
 
-  @Override
-  public void mouseExited(MouseEvent e) {
-    // TODO Auto-generated method stub
-    throw new UnsupportedOperationException("Unimplemented method 'mouseExited'");
+    golfBall.setVelocity(velocityX, velocityY);
   }
-  
-
 }

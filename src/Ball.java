@@ -4,12 +4,11 @@ import java.awt.geom.Ellipse2D;
 
 public class Ball {
   private double x,y;
-  private double Xvelocity = 0;
-  private double Yvelocity = 0;
-  private final double radius = 10;
-  private final double friction = 1;  //poate 0.99?
-  private final double gravity = 0.5;    
-
+  private double velocityX = 0;
+  private double velocityY = 0;
+  private final double radius = 9f;
+  private final double friction = 0.99;  //chiar 0.99  
+  private final double restitution = 0.8; //slow down after collision
 
   public Ball(double x, double y){
     this.x = x;
@@ -17,17 +16,27 @@ public class Ball {
   }
 
   public void update() {
-    x = x + Xvelocity; //adauga cat tragi de mouse velocitate
-    y = y + Yvelocity; //adauga cat tragi de mouse velocitate
-    Yvelocity += gravity;
-    Xvelocity *= friction;
-    Yvelocity *= friction;
-    if (x - radius < 0 || x + radius > 800) { 
-      Xvelocity = -Xvelocity;
-  }
-  if (y - radius < 0 || y + radius > 600) {  
-    Yvelocity = -Yvelocity; 
-  }
+    x += velocityX; //adauga cat tragi de mouse velocitate
+    y += velocityY; //adauga cat tragi de mouse velocitate
+
+    velocityX *= friction;
+    velocityY *= friction;
+
+    if (x - radius < 0) {
+      x = radius;
+      velocityX = -velocityX * restitution;
+    } else if (x + radius > GameWindow.WIDTH) {
+      x = GameWindow.WIDTH - radius;
+      velocityX = -velocityX * restitution;
+    }
+
+    if (y - radius < 0) {
+      y = radius;
+      velocityY = -velocityY * restitution;
+    } else if (y + radius > GameWindow.HEIGHT) {
+      y = GameWindow.HEIGHT - radius;
+      velocityY = -velocityY * restitution;
+    }
     
   }
 
@@ -39,9 +48,9 @@ public class Ball {
   public double getX() { return x; }
   public double getY() { return y; }
   public void setXY(double x, double y) { this.x = x; this.y = y; }
-  public void setVelocity(double Xvelocity, double Yvelocity) {
-    this.Xvelocity = Xvelocity;
-    this.Yvelocity = Yvelocity;
+  public void setVelocity(double velocityX, double velocityY) {
+    this.velocityX = velocityX;
+    this.velocityY = velocityY;
 }
 }
 

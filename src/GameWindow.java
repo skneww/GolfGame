@@ -1,6 +1,7 @@
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import javax.swing.JPanel;
 
 public class GameWindow extends JPanel 
@@ -17,6 +18,12 @@ public class GameWindow extends JPanel
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
         this.setBackground(Color.ORANGE);
         this.setDoubleBuffered(true);
+        //Initialize GolfBall
+        golfBall = new Ball(WIDTH/2, HEIGHT/2);
+        //Start MouseListener and Handler
+        MouseHandler mouseHandler = new MouseHandler(golfBall);
+        this.addMouseListener(mouseHandler);
+
         startGame();
     }
 
@@ -30,8 +37,8 @@ public class GameWindow extends JPanel
     public void run() {
         //Frames and time of loop
         final double FPS = 60.0;
-        final double TargetTime = 1e9 / FPS;
-        double nextTime = System.nanoTime() + TargetTime;
+        final double TARGETTIME = 1e9 / FPS;
+        double nextTime = System.nanoTime() + TARGETTIME;
 
         // * Game Loop * //
         while (running) {  
@@ -52,7 +59,7 @@ public class GameWindow extends JPanel
 
                 Thread.sleep((long) remainingTime);
 
-                nextTime += TargetTime;
+                nextTime += TARGETTIME;
 
             } catch (InterruptedException e) {
                 e.printStackTrace();
@@ -61,14 +68,19 @@ public class GameWindow extends JPanel
     }
 
     private void processInput() {
-
+        //!Unused yet!//
     }
 
     private void updateGame() {
-        
+        golfBall.update();
     }
 
     private void renderGame() {
+        repaint();
     }
     
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        golfBall.draw((Graphics2D) g);
+    }
 }
