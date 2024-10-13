@@ -9,11 +9,11 @@ public class Hole {
 
     public Hole(int level) {
         if (level == 1) {
-            this.x = 200;
-            this.y = 300;
+            this.x = 750;//720
+            this.y = 300;//500
         } else if (level == 2) {
-            this.x = 600;
-            this.y = 400;
+            this.x = 750;
+            this.y = 300;
         } else if (level == 3) {
             this.x = 200;
             this.y = 100;

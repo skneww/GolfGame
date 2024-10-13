@@ -71,13 +71,15 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
 
     private void updateGame() {
         if (golfBall != null) {
-            golfBall.update();
+            // Actualizează mingea și verifică coliziunea cu obstacolele
+            golfBall.update(levels.get(currentLevelIndex).getObstacles());  /// am schimbat pentru a transmite lista de obstacole
         }
         if (hole != null && golfBall != null && isBallInHole(golfBall)) {
             System.out.println("Level completed! Moving to next level...");
             goToNextLevel();
         }
     }
+    
 
     private void renderGame() {
         repaint();
@@ -87,15 +89,23 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
         
         //Levelul 1
         List<Obstacle> level1Obstacles = new ArrayList<>();
-        level1Obstacles.add(new Obstacle(300, 300, 50, 50));
-        level1Obstacles.add(new Obstacle(600, 400, 30, 60));
-        levels.add(new Level(1, new Ball(50, 550), level1Obstacles));
-        
+        level1Obstacles.add(new Obstacle(200, 100, 50, 400));
+        level1Obstacles.add(new Obstacle(550, 100, 50, 400));
+        level1Obstacles.add(new Obstacle(370, 200, 50, 350));
+        levels.add(new Level(1, new Ball(50, 50), level1Obstacles));
         //Levelul 2
         List<Obstacle> level2Obstacles = new ArrayList<>();
-        level2Obstacles.add(new Obstacle(300, 300, 50, 50, true));
+        level2Obstacles.add(new Obstacle(200, 50, 200, 200, true));
         level2Obstacles.add(new Obstacle(600, 400, 30, 60, true));
-        levels.add(new Level(2, new Ball(100, 550), level2Obstacles));
+        level2Obstacles.add(new Obstacle(300, 300, 50, 50, true));
+        levels.add(new Level(2, new Ball(50, 300), level2Obstacles));
+
+
+        //Levelul 3
+        List<Obstacle> level3obstacles = new ArrayList<>();
+        level3obstacles.add(new Obstacle(300, 300, 50, 400));
+        Level level3 = new Level(3, new Ball(50, 550), level3obstacles);
+        levels.add(level3);
         
     }
 
@@ -103,12 +113,11 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
         // Use the ball from the current level
         Level currentLevel = levels.get(currentLevelIndex);
         golfBall = currentLevel.getStartBall();
-        golfBall.setVelocity(100, 0);  // Customize velocity for each level if needed
+        golfBall.setVelocity(0, 0);
     }
 
     private void initializeHole() {
-        // Initialize the hole for the current level
-        hole = new Hole(currentLevelIndex + 1);  // Update the hole position based on the level
+        hole = new Hole(currentLevelIndex + 1);
     }
 
     public boolean isBallInHole(Ball ball) {
@@ -183,24 +192,17 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
     @Override
     public void mouseExited(MouseEvent e) {}
 
-    // Move to the next level
     private void goToNextLevel() {
         currentLevelIndex++;
         if (currentLevelIndex < levels.size()) {
-            initializeBall();  // Reset the ball for the new level
-            initializeHole();  // Update hole position for the new level
+            initializeBall();  
+            initializeHole(); 
+            mouseHandler = new MouseHandler(golfBall);
+             this.addMouseListener(mouseHandler);
+             this.addMouseMotionListener(mouseHandler);
         } else {
             System.out.println("Congratulations! You've completed all levels.");
-            running = false;  // End the game
-        }
-    }
-    private void checkCollisions() {
-        for (Obstacle obstacle : levels.get(currentLevelIndex).getObstacles()) {
-            if (golfBall.getBounds().intersects(obstacle.getBounds())) {
-                // Simple collision response: stop the ball
-                golfBall.setVelocity(0, 0); // Assuming this stops the ball
-                break; // Exit after the first collision
-            }
+            running = false;  
         }
     }
 }

@@ -2,6 +2,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.Rectangle;
+import java.util.List;
 
 public class Ball {
     private double x, y;
@@ -9,32 +10,34 @@ public class Ball {
     private double Yvelocity = 0;
     private final double radius = 10;
     private final double friction = 0.99;
-    private final double gravity = 0.5;
 
     public Ball(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
-    public void update() {
-        x += Xvelocity; // Update x position based on velocity
-        y += Yvelocity; // Update y position based on velocity
-        Yvelocity += gravity; // Apply gravity
-
-        // Apply friction
+    public void update(List<Obstacle> obstacles) {  
+        x += Xvelocity;
+        y += Yvelocity; 
         Xvelocity *= friction;
         Yvelocity *= friction;
-
-        // Bounce off left and right walls
-        if (x - radius < 0 || x + radius > 800) {
-            Xvelocity = -Xvelocity; // Reverse x velocity
-            x = Math.max(radius, Math.min(x, 800 - radius)); // Keep ball within bounds
+    
+        
+        for (Obstacle obstacle : obstacles) { 
+            if (obstacle.checkCollision(this)) {  
+                handleCollision(obstacle);  
+            }
         }
-
-        // Bounce off top and bottom walls
+    
+        
+        if (x - radius < 0 || x + radius > 800) {
+            Xvelocity = -Xvelocity;  
+            x = Math.max(radius, Math.min(x, 800 - radius)); 
+        }
+    
         if (y - radius < 0 || y + radius > 600) {
-            Yvelocity = -Yvelocity; // Reverse y velocity
-            y = Math.max(radius, Math.min(y, 600 - radius)); // Keep ball within bounds
+            Yvelocity = -Yvelocity;  
+            y = Math.max(radius, Math.min(y, 600 - radius));  
         }
     }
 
@@ -64,9 +67,13 @@ public class Ball {
         this.Xvelocity = Xvelocity;
         this.Yvelocity = Yvelocity;
     }
+    private void handleCollision(Obstacle obstacle) {
+        Xvelocity = -Xvelocity;
+        Yvelocity = -Yvelocity;
+    }
 
     // Return the bounding box of the ball
-    public Rectangle getBounds() {
+    <publicgle> Rectangle getBounds() {
         return new Rectangle((int) (x - radius), (int) (y - radius), (int) (radius * 2), (int) (radius * 2));
     }
 }
