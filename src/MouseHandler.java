@@ -14,6 +14,10 @@ public class MouseHandler extends MouseAdapter {
         this.golfBall = ball;
     }
 
+    public void SetGolfBall(Ball ball) {
+        this.golfBall = ball;
+    }
+    
     @Override 
     public void mousePressed(MouseEvent e) {
         pressX = e.getX();

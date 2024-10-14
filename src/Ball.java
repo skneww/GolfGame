@@ -22,22 +22,30 @@ public class Ball {
         Xvelocity *= friction;
         Yvelocity *= friction;
     
-        
+        //Wall colisions
+        if (x - radius < 0) {
+            x =  radius;
+            Xvelocity = -Xvelocity;
+        }
+        if (x+radius > GameWindow.WIDTH) {
+            x = GameWindow.WIDTH - radius;
+            Xvelocity = -Xvelocity;
+        }
+    
+        if (y - radius < 0) {
+            y = radius;
+            Yvelocity = -Yvelocity;  
+        }
+        if (y + radius > GameWindow.HEIGHT) {
+            y = GameWindow.HEIGHT - radius;
+            Yvelocity = -Yvelocity;
+        }
+
+        //Obstacle Collision
         for (Obstacle obstacle : obstacles) { 
             if (obstacle.checkCollision(this)) {  
                 handleCollision(obstacle);  
             }
-        }
-    
-        
-        if (x - radius < 0 || x + radius > 800) {
-            Xvelocity = -Xvelocity;  
-            x = Math.max(radius, Math.min(x, 800 - radius)); 
-        }
-    
-        if (y - radius < 0 || y + radius > 600) {
-            Yvelocity = -Yvelocity;  
-            y = Math.max(radius, Math.min(y, 600 - radius));  
         }
     }
 
@@ -67,9 +75,53 @@ public class Ball {
         this.Xvelocity = Xvelocity;
         this.Yvelocity = Yvelocity;
     }
+
+    private double clamp(double value, double min, double max) {
+        return Math.max(min, Math.min(max, value));
+    }
+
     private void handleCollision(Obstacle obstacle) {
-        Xvelocity = -Xvelocity;
-        Yvelocity = -Yvelocity;
+        Rectangle rect = obstacle.getBounds();
+
+        //closest point on rect to the ball
+        double closestX = clamp(x, rect.x, rect.x + rect.width);
+        double closestY = clamp(y, rect.y, rect.y + rect.height);
+
+        //circle center to point
+        double distanceX = x - closestX;
+        double distanceY = y - closestY;
+
+        double distanceSquared = distanceX * distanceX + distanceY * distanceY;
+
+        if (distanceSquared < radius * radius) {
+
+            double distance = Math.sqrt(distanceSquared);
+            double overlap = radius - distance;
+
+            //Prevent division by zero
+            if (distance == 0) {
+                distanceX = Xvelocity;
+                distanceY = Yvelocity;
+                distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+            }
+
+            //normal vector
+            double nX = distanceX/distance;
+            double nY = distanceY/distance;
+
+            //remove ball from obstacle
+            x += nX * overlap;
+            y += nY * overlap;
+
+            //reverse velocity
+            double dotProduct = Xvelocity * nX + Yvelocity * nY;
+            Xvelocity -= 2 * dotProduct * nX;
+            Yvelocity -= 2 * dotProduct * nY;
+
+            //friction
+            Xvelocity *= friction;
+            Yvelocity *= friction;
+        }
     }
 
     // Return the bounding box of the ball

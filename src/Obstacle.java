@@ -19,6 +19,7 @@ public class Obstacle {
         this.height = height; 
         this.isTriangle = false;
     }
+
     public Obstacle (int x,int y,int width, int height, boolean isTriangle){
         this.x = x;
         this.y = y;
@@ -34,16 +35,13 @@ public class Obstacle {
              int[]  yPoints = new int[]{y + height, y , y + height};
             Polygon triangle = new Polygon(xPoints, yPoints, 3);
             g2d.fillPolygon(triangle); 
-        } else{
+        } else {
             g2d.fill(new Rectangle.Double(x , y , width , height));
         }
       }
+
       public Rectangle getBounds() {
-        if (isTriangle) {
-            return new Rectangle(x, y, width, height);
-        } else {
-            return new Rectangle(x, y, width, height);
-        }
+        return new Rectangle(x,y,width,height);
     }
     
     public boolean checkCollision(Ball golfBall) {
@@ -52,19 +50,35 @@ public class Obstacle {
             int[] xPoints = { x, x + width / 2, x + width };
             int[] yPoints = { y + height, y, y + height };
             Polygon triangle = new Polygon(xPoints, yPoints, 3);
-            return checkCircleTriangleCollision(golfBall, triangle);
+            return triangle.intersects(golfBall.getBounds());
         } else {
-            return checkCircleRectangleCollision(golfBall, getBounds());
+            return checkCircleRectangleCollision(golfBall);
         }
     }
-    
-    private boolean checkCircleTriangleCollision(Ball golfBall, Polygon triangle) {
-        Rectangle ballBounds = golfBall.getBounds();  
-        return triangle.intersects(ballBounds);
-    }
-    private boolean checkCircleRectangleCollision(Ball ball, Rectangle rect) {
-        Rectangle ballBounds = ball.getBounds();  
-        return rect.intersects(ballBounds); 
+
+    private boolean checkCircleRectangleCollision(Ball ball) {
+        double circleDistanceX = Math.abs(ball.getX() - (x + width/2));
+        double circleDistanceY = Math.abs(ball.getY() - (y + height/2));
+
+        if (circleDistanceX > (width/2 + ball.getRadius())) {
+            return false;
+        }
+        
+        if (circleDistanceY > (height/2 + ball.getRadius())) {
+            return false;
+        }
+
+        if (circleDistanceX < (width/2)) {
+            return true;
+        }
+
+        if (circleDistanceY < (height/2)) {
+            return true;
+        }
+
+        double cornerDistanceSq = Math.pow(circleDistanceX - width/2, 2) + Math.pow(circleDistanceY - height/2, 2);
+        
+        return (cornerDistanceSq <= Math.pow(ball.getRadius(),2));
     }
     
 }  

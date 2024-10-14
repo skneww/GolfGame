@@ -4,12 +4,11 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.List;
 import java.util.ArrayList;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import javax.swing.JPanel;
 import java.awt.geom.Line2D;
 
-public class GameWindow extends JPanel implements Runnable, MouseListener {
+public class GameWindow extends JPanel implements Runnable {
+
     // Window Size
     public static final int WIDTH = 800;
     public static final int HEIGHT = 600;
@@ -17,17 +16,16 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
     // Game Loop Variables
     private Thread gameThread;
     private boolean running = false;
-    private boolean ballPlaced = false;
     private List<Level> levels;
     private int currentLevelIndex;
     private Ball golfBall;
     private Hole hole;
-    MouseHandler mouseHandler;
+    private MouseHandler mouseHandler;
 
     public GameWindow() {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
-        this.setBackground(Color.GREEN);
-        this.setDoubleBuffered(true);
+        setBackground(Color.GREEN);
+        setDoubleBuffered(true);
         initializeLevels();
         currentLevelIndex = 0; // Start with the first level (level 1)
         initializeBall();
@@ -43,30 +41,27 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
         gameThread = new Thread(this);
         gameThread.start();
     }
+
     @Override
     public void run() {
-        final double FPS = 60.0;
-        final double TargetTime = 1e9 / FPS;
-
-        long startTime = System.nanoTime();
-        double elapsed = 0;
+        final int FPS = 60;
+        final long TARGETTIME = 1000 / FPS;
 
         while (running) {
-            long currentTime = System.nanoTime();
-            elapsed += (currentTime - startTime) / TargetTime;
-            startTime = currentTime;
+            long startTime = System.currentTimeMillis();
 
-            if (elapsed > 1) {
-                processInput();
-                updateGame();
-                renderGame();
-                elapsed--;
+            updateGame();
+            renderGame();
+            
+            long elapsedTime = System.currentTimeMillis() - startTime;
+            long waitTime = TARGETTIME - elapsedTime;
+            try {
+                Thread.sleep(Math.max(0,waitTime));
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
             }
         }
-    }
-
-    private void processInput() {
-        // Handle inputs here (e.g., mouse clicks)
     }
 
     private void updateGame() {
@@ -84,6 +79,7 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
     private void renderGame() {
         repaint();
     }
+
     private void initializeLevels() {
         levels = new ArrayList<>();
         
@@ -114,6 +110,9 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
         Level currentLevel = levels.get(currentLevelIndex);
         golfBall = currentLevel.getStartBall();
         golfBall.setVelocity(0, 0);
+        if (mouseHandler != null) {
+            mouseHandler.SetGolfBall(golfBall);
+        }
     }
 
     private void initializeHole() {
@@ -158,8 +157,6 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
             hole.draw(g2d);
         }
         if (mouseHandler.isDragging) {
-
-
             double deltaX = Math.abs(mouseHandler.pressX - mouseHandler.currentMouseX);
             double deltaY = Math.abs(mouseHandler.pressY - mouseHandler.currentMouseY);
             int colorValue = (int) Math.min(255, Math.max(0, (deltaX + deltaY) / 2));
@@ -169,28 +166,6 @@ public class GameWindow extends JPanel implements Runnable, MouseListener {
             g2d.draw(trajectoryLine);   
         }
     }
-
-    @Override
-    public void mouseClicked(MouseEvent e) {
-        int mouseX = e.getX();
-        int mouseY = e.getY();
-        if (!ballPlaced) {
-            golfBall = new Ball(mouseX, mouseY);
-            ballPlaced = true;
-        } else {
-            golfBall.setXY(mouseX, mouseY);
-        }
-    }
-
-    // Implementing mouse events but leaving them empty for now
-    @Override
-    public void mousePressed(MouseEvent e) {}
-    @Override
-    public void mouseReleased(MouseEvent e) {}
-    @Override
-    public void mouseEntered(MouseEvent e) {}
-    @Override
-    public void mouseExited(MouseEvent e) {}
 
     private void goToNextLevel() {
         currentLevelIndex++;
