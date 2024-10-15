@@ -59,12 +59,16 @@ public class GameWindow extends JPanel implements Runnable {
         if (currentState != null) {
             removeMouseListener(currentState);
             removeMouseMotionListener(currentState);
+            removeAll();
         }
         currentState = newState;
         if (currentState != null) {
             addMouseListener(currentState);
             addMouseMotionListener(currentState);
+            currentState.init();
         }
+        revalidate();
+        repaint();
     }
 
     private synchronized void startGame() {

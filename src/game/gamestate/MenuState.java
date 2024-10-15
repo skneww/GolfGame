@@ -1,8 +1,7 @@
 package gamestate;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import main.GameWindow;
@@ -18,45 +17,50 @@ public class MenuState extends State {
     //constructor
     public MenuState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
-        initComponents(); //render interface
     }
     
-    private void initComponents() {
+    @Override
+    public void init() {
         menuPanel = new JPanel();
-        menuPanel.setLayout(null);
+        menuPanel.setOpaque(false);
+        menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
 
         playButton = new JButton("Play");
-        playButton.setBounds(GameWindow.WIDTH / 2 - 75, GameWindow.HEIGHT / 2 - 50, 150, 40);
+        settingsButton = new JButton("Settings");
+        exitButton = new JButton("Exit");
+
+        playButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        settingsButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
+
         playButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameWindow.changeState(new PlayState(gameWindow));
             }
         });
 
-        settingsButton = new JButton("Settings");
-        playButton.setBounds(GameWindow.WIDTH / 2 - 75, GameWindow.HEIGHT / 2, 150, 40);
-        playButton.addActionListener(new ActionListener() {
+        settingsButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameWindow.changeState(new SettingsState(gameWindow));
             }
         });
 
-        exitButton = new JButton("Exit");
-        playButton.setBounds(GameWindow.WIDTH / 2 - 75, GameWindow.HEIGHT / 2 + 50, 150, 40);
-        playButton.addActionListener(new ActionListener() {
+        exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-                gameWindow.changeState(new PlayState(gameWindow));
+                System.exit(0);
             }
         });
 
+        menuPanel.add(Box.createVerticalGlue());
         menuPanel.add(playButton);
+        menuPanel.add(Box.createVerticalStrut(10));
         menuPanel.add(settingsButton);
+        menuPanel.add(Box.createVerticalStrut(10));
         menuPanel.add(exitButton);
-        menuPanel.setOpaque(false);
-        menuPanel.setBounds(0,0, GameWindow.WIDTH, GameWindow.HEIGHT);
-        
-        gameWindow.setLayout(null);
-        gameWindow.add(menuPanel);
+        menuPanel.add(Box.createVerticalGlue());
+
+        gameWindow.setLayout(new BorderLayout());
+        gameWindow.add(menuPanel, BorderLayout.CENTER);
     }
 
     @Override

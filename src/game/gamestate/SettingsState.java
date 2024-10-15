@@ -1,8 +1,7 @@
 package gamestate;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import main.GameWindow;
@@ -15,27 +14,30 @@ public class SettingsState extends State {
 
     public SettingsState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
-        initComponents();
     }
 
-    private void initComponents() {
+    @Override
+    public void init() {
         settingsPanel = new JPanel();
-        settingsPanel.setLayout(null);
+        settingsPanel.setOpaque(false);
+        settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
+
+        // Add settings components here (e.g., checkboxes, sliders)
 
         backButton = new JButton("Back");
-        backButton.setBounds(GameWindow.WIDTH / 2 - 75, GameWindow.HEIGHT / 2 + 50, 150, 40);
+        backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         backButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameWindow.changeState(new MenuState(gameWindow));
             }
         });
 
+        settingsPanel.add(Box.createVerticalGlue());
         settingsPanel.add(backButton);
-        settingsPanel.setOpaque(false);
-        settingsPanel.setBounds(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT);
+        settingsPanel.add(Box.createVerticalGlue());
 
-        gameWindow.setLayout(null);
-        gameWindow.add(settingsPanel);
+        gameWindow.setLayout(new BorderLayout());
+        gameWindow.add(settingsPanel, BorderLayout.CENTER);
     }
 
     @Override

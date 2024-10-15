@@ -50,7 +50,7 @@ public class MouseHandler extends MouseAdapter {
             int x1 = (int) (endX + arrowSize * Math.cos(angle + Math.PI / 6));
             int y1 = (int) (endY + arrowSize * Math.sin(angle + Math.PI / 6));
             int x2 = (int) (endX + arrowSize * Math.cos(angle - Math.PI / 6));
-            int y2 = (int) (endX + arrowSize * Math.cos(angle - Math.PI / 6));
+            int y2 = (int) (endY + arrowSize * Math.sin(angle - Math.PI / 6));
 
             g2d.drawLine(endX, endY, x1, y1);
             g2d.drawLine(endX, endY, x2, y2);

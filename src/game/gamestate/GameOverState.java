@@ -1,8 +1,7 @@
 package gamestate;
 
-import javax.swing.JButton;
-import javax.swing.JPanel;
-import java.awt.Graphics2D;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import main.GameWindow;
@@ -18,15 +17,23 @@ public class GameOverState extends State {
     public GameOverState(GameWindow gameWindow, int finalScore) {
         this.gameWindow = gameWindow;
         this.finalScore = finalScore;
-        initComponents();
     }
 
-    private void initComponents() {
+    @Override
+    public void init() {
         gameOverPanel = new JPanel();
-        gameOverPanel.setLayout(null);
+        gameOverPanel.setOpaque(false);
+        gameOverPanel.setLayout(new BoxLayout(gameOverPanel, BoxLayout.Y_AXIS));
+
+        JLabel gameOverLabel = new JLabel("Game Over!");
+        gameOverLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        gameOverLabel.setFont(new Font("Arial", Font.BOLD, 24));
+        JLabel scoreLabel = new JLabel("Final Score: " + finalScore);
+        scoreLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+        scoreLabel.setFont(new Font("Arial", Font.PLAIN, 18));
 
         menuButton = new JButton("Main Menu");
-        menuButton.setBounds(GameWindow.WIDTH / 2 - 75, GameWindow.HEIGHT / 2, 150, 40);
+        menuButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         menuButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 gameWindow.changeState(new MenuState(gameWindow));
@@ -34,22 +41,26 @@ public class GameOverState extends State {
         });
 
         exitButton = new JButton("Exit");
-        exitButton.setBounds(GameWindow.WIDTH / 2 - 75, GameWindow.HEIGHT / 2 + 50, 150, 40);
+        exitButton.setAlignmentX(Component.CENTER_ALIGNMENT);
         exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 System.exit(0);
             }
         });
 
+        gameOverPanel.add(Box.createVerticalGlue());
+        gameOverPanel.add(gameOverLabel);
+        gameOverPanel.add(Box.createVerticalStrut(10));
+        gameOverPanel.add(scoreLabel);
+        gameOverPanel.add(Box.createVerticalStrut(20));
         gameOverPanel.add(menuButton);
+        gameOverPanel.add(Box.createVerticalStrut(10));
         gameOverPanel.add(exitButton);
-        gameOverPanel.setOpaque(false);
-        gameOverPanel.setBounds(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT);
+        gameOverPanel.add(Box.createVerticalGlue());
 
-        gameWindow.setLayout(null);
-        gameWindow.add(gameOverPanel);
+        gameWindow.setLayout(new BorderLayout());
+        gameWindow.add(gameOverPanel, BorderLayout.CENTER);
     }
-
     @Override
     public void update() {
         // No updates in game over state

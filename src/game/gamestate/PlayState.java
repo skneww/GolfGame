@@ -22,6 +22,10 @@ public class PlayState extends State {
 
     public PlayState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
+    }
+
+    @Override
+    public void init() {
         levelManager = new LevelManager();
         loadLevel(0);
     }
