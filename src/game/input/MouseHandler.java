@@ -15,9 +15,11 @@ public class MouseHandler extends MouseAdapter {
     private Ball golfBall;
     private PlayState playState;
     public boolean isDragging = false;
+    private boolean canDrag = false;
     public double currentMouseX;
     public double currentMouseY;
     private double power;
+    
 
     public MouseHandler(Ball ball, PlayState playState) {
         this.golfBall = ball;
@@ -64,17 +66,28 @@ public class MouseHandler extends MouseAdapter {
     @Override 
     public void mousePressed(MouseEvent e) {
         if (!golfBall.isMoving()) {
-            pressX = e.getX();
-            pressY = e.getY();
-            isDragging = true;
-            currentMouseX = e.getX();
-            currentMouseY = e.getY();
+            double mx = e.getX();
+            double my = e.getY();
+            double dx = mx - golfBall.getX();
+            double dy = my - golfBall.getY();
+            double distance = Math.sqrt(dx*dx + dy*dy);
+
+            if (distance <= golfBall.getRadius()) {
+                canDrag = true;
+                pressX = e.getX();
+                pressY = e.getY();
+                isDragging = true;
+                currentMouseX = e.getX();
+                currentMouseY = e.getY();
+            } else {
+                canDrag = false;
+            }
         }
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if (!golfBall.isMoving() && isDragging) {
+        if (!golfBall.isMoving() && isDragging && canDrag) {
             double deltaX = pressX - e.getX();
             double deltaY = pressY - e.getY();
             double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
@@ -98,7 +111,7 @@ public class MouseHandler extends MouseAdapter {
 
     @Override 
     public void mouseDragged(MouseEvent e) {
-        if (isDragging && !golfBall.isMoving()) {
+        if (isDragging && !golfBall.isMoving() && canDrag) {
             currentMouseX = e.getX();
             currentMouseY = e.getY();
 

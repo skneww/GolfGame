@@ -30,7 +30,7 @@ public class GameWindow extends JPanel implements Runnable {
         
         window = new JFrame("Golf Game");
         window.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        window.setResizable(true);
+        window.setResizable(false);
         window.add(this);
         window.pack();
         window.setLocationRelativeTo(null);
