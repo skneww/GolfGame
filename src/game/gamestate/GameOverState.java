@@ -71,9 +71,5 @@ public class GameOverState extends State {
         // Display final score
         g2d.setColor(gameWindow.getBackground());
         g2d.fillRect(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT);
-
-        g2d.setColor(java.awt.Color.WHITE);
-        g2d.drawString("Game Over!", GameWindow.WIDTH / 2 - 40, GameWindow.HEIGHT / 2 - 60);
-        g2d.drawString("Final Score: " + finalScore, GameWindow.WIDTH / 2 - 50, GameWindow.HEIGHT / 2 - 30);
     }
 }

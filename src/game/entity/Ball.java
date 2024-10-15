@@ -23,13 +23,13 @@ public class Ball {
         this.y = y;
     }
 
-    public void update(List<Obstacle> obstacles, List<Obstacle> terrainAreas) {  
+    public void update(List<Obstacle> obstacles, List<TerrainArea> terrainAreas) {  
         x += xVelocity;
         y += Yvelocity;
 
         double currentFriction = getCurrentFriction(terrainAreas);
-        xVelocity *= DEFAULT_FRICTION;
-        Yvelocity *= DEFAULT_FRICTION;
+        xVelocity *= currentFriction;
+        Yvelocity *= currentFriction;
     
         //Stop the ball if it's moving very slowly
         if (Math.abs(xVelocity) < 0.1) xVelocity = 0;

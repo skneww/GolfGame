@@ -21,6 +21,7 @@ public class Level {
     public Level(int levelNumber) {
         this.levelNumber = levelNumber;
         obstacles = new ArrayList<>();
+        terrainAreas = new ArrayList<>();
     }
 
     public void setPar(int par) {

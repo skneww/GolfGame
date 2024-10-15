@@ -24,6 +24,7 @@ public class PlayState extends State {
 
     public PlayState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
+        init();
     }
 
     @Override

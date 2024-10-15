@@ -6,6 +6,7 @@ import java.util.List;
 import entity.Ball;
 import entity.Hole;
 import obstacle.Obstacle;
+import terrain.*;
 public class LevelManager {
 
     private List<Level> levels;
@@ -33,6 +34,9 @@ public class LevelManager {
         level1.addObstacle(new Obstacle(300, 200, 200, 20)); //First middle Obstacle
         level1.addObstacle(new Obstacle(300, 200, 20, 200)); //Second middle Obstacle
 
+        TerrainArea sandTrap = new TerrainArea(200, 300, 100, 100, TerrainType.SAND);
+        level1.addTerrainArea(sandTrap);
+
         levels.add(level1);
 
         // Level 2
@@ -50,6 +54,9 @@ public class LevelManager {
         level2.addObstacle(new Obstacle(400, 150, 150, 20));
         level2.addObstacle(new Obstacle(550, 150, 20, 300));
         level2.addObstacle(new Obstacle(550, 450, 150, 20));
+
+        TerrainArea waterHazard = new TerrainArea(400, 200, 150, 50, TerrainType.WATER);
+        level2.addTerrainArea(waterHazard);
         
         levels.add(level2);
 
