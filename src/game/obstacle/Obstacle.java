@@ -22,7 +22,6 @@ public class Obstacle {
         this.height = height; 
         this.isTriangle = false;
     }
-
     public Obstacle (int x,int y,int width, int height, boolean isTriangle){
         this.x = x;
         this.y = y;
