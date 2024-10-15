@@ -11,10 +11,11 @@ import main.GameWindow;
 
 public class Ball {
     private double x, y;
-    private double Xvelocity = 0;
+    private double xVelocity = 0;
     private double Yvelocity = 0;
     private final double radius = 10;
-    private final double friction = 0.99;
+    private final double DEFAULT_FRICTION = 0.99;
+    private final double STOP_THRESHOLD = 0.1;
 
     public Ball(double x, double y) {
         this.x = x;
@@ -22,23 +23,23 @@ public class Ball {
     }
 
     public void update(List<Obstacle> obstacles) {  
-        x += Xvelocity;
+        x += xVelocity;
         y += Yvelocity; 
-        Xvelocity *= friction;
-        Yvelocity *= friction;
+        xVelocity *= DEFAULT_FRICTION;
+        Yvelocity *= DEFAULT_FRICTION;
     
         //Stop the ball if it's moving very slowly
-        if (Math.abs(Xvelocity) < 0.1) Xvelocity = 0;
+        if (Math.abs(xVelocity) < 0.1) xVelocity = 0;
         if (Math.abs(Yvelocity) < 0.1) Yvelocity = 0;
 
         //Wall colisions
         if (x - radius < 0) {
             x =  radius;
-            Xvelocity = -Xvelocity;
+            xVelocity = -xVelocity;
         }
         if (x+radius > GameWindow.WIDTH) {
             x = GameWindow.WIDTH - radius;
-            Xvelocity = -Xvelocity;
+            xVelocity = -xVelocity;
         }
     
         if (y - radius < 0) {
@@ -80,13 +81,13 @@ public class Ball {
         this.y = y;
     }
 
-    public void setVelocity(double Xvelocity, double Yvelocity) {
-        this.Xvelocity = Xvelocity;
+    public void setVelocity(double xVelocity, double Yvelocity) {
+        this.xVelocity = xVelocity;
         this.Yvelocity = Yvelocity;
     }
 
     public boolean isMoving() {
-        return Math.sqrt(Xvelocity * Xvelocity + Yvelocity * Yvelocity) > 0.1;
+        return Math.sqrt(xVelocity * xVelocity + Yvelocity * Yvelocity) > STOP_THRESHOLD;
     }
 
     private double clamp(double value, double min, double max) {
@@ -113,7 +114,7 @@ public class Ball {
 
             //Prevent division by zero
             if (distance == 0) {
-                distanceX = Xvelocity;
+                distanceX = xVelocity;
                 distanceY = Yvelocity;
                 distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
             }
@@ -127,13 +128,13 @@ public class Ball {
             y += nY * overlap;
 
             //reverse velocity
-            double dotProduct = Xvelocity * nX + Yvelocity * nY;
-            Xvelocity -= 2 * dotProduct * nX;
+            double dotProduct = xVelocity * nX + Yvelocity * nY;
+            xVelocity -= 2 * dotProduct * nX;
             Yvelocity -= 2 * dotProduct * nY;
 
-            //friction
-            Xvelocity *= friction;
-            Yvelocity *= friction;
+            //DEFAULT_FRICTION
+            xVelocity *= DEFAULT_FRICTION;
+            Yvelocity *= DEFAULT_FRICTION;
         }
     }
 
