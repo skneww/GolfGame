@@ -2,13 +2,13 @@ package input;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import entity.Ball;
 import gamestate.PlayState;
 
-import entity.Ball;
-
-public class MouseHandler extends gamestate.State {
+public class MouseHandler extends MouseAdapter {
 
     protected double pressX;
     protected double pressY;
@@ -108,17 +108,5 @@ public class MouseHandler extends gamestate.State {
             double maxDistance = 200;
             power = Math.min(distance / maxDistance * 100 , 100);
         }
-    }
-
-    @Override
-    public void update() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
-    }
-
-    @Override
-    public void render(Graphics2D g2d) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'render'");
     }
 }

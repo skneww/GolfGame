@@ -2,6 +2,7 @@ package gamestate;
 
 import java.awt.Graphics2D;
 import java.awt.Color;
+
 import main.GameWindow;
 import entity.Ball;
 import entity.Hole;
