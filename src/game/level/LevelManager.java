@@ -22,6 +22,7 @@ public class LevelManager {
         Level level1 = new Level(1);
         level1.setStartBall(new Ball(50,550));
         level1.setHole(new Hole(750,50));
+        level1.setPar(3);
 
         //Border
         level1.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
@@ -38,6 +39,7 @@ public class LevelManager {
         Level level2 = new Level(2);
         level2.setStartBall(new Ball(50, 550));
         level2.setHole(new Hole(750, 50));
+        level2.setPar(4);
 
         //Border
         level2.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
@@ -55,6 +57,7 @@ public class LevelManager {
         Level level3 = new Level(3);
         level3.setStartBall(new Ball(400, 550));
         level3.setHole(new Hole(400, 50));
+        level3.setPar(5);
 
         //Border
         level3.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border

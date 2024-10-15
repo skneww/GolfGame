@@ -1,6 +1,7 @@
-// TerrainArea.java
 package terrain;
 
+import java.awt.Graphics;
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import terrain.TerrainType;
@@ -23,7 +24,8 @@ public class TerrainArea {
     }
 
     public void draw(Graphics2D g2d) {
-        g2d.setColor(terrainType.getColor());
+        Color terrainColor = terrainType.getColor();
+        g2d.setColor(terrainColor);
         g2d.fill(area);
     }
 }

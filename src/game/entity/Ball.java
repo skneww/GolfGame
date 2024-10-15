@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.util.List;
 import obstacle.Obstacle;
 import main.GameWindow;
+import terrain.*;
 
 
 public class Ball {
@@ -22,9 +23,11 @@ public class Ball {
         this.y = y;
     }
 
-    public void update(List<Obstacle> obstacles) {  
+    public void update(List<Obstacle> obstacles, List<Obstacle> terrainAreas) {  
         x += xVelocity;
-        y += Yvelocity; 
+        y += Yvelocity;
+
+        double currentFriction = getCurrentFriction(terrainAreas);
         xVelocity *= DEFAULT_FRICTION;
         Yvelocity *= DEFAULT_FRICTION;
     
@@ -57,6 +60,15 @@ public class Ball {
                 handleCollision(obstacle);  
             }
         }
+    }
+
+    private double getCurrentFriction(List<TerrainArea> terrainAreas) {
+        for (TerrainArea terrainArea : terrainAreas) {
+            if (terrainArea.getArea().contains(x,y)) {
+                return terrainArea.getTerrainType().getFriction();
+            }
+        }
+        return DEFAULT_FRICTION;
     }
 
     public void draw(Graphics2D g2d) {

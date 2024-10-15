@@ -14,11 +14,13 @@ public class PlayState extends State {
 
     private GameWindow gameWindow;
     private LevelManager levelManager;
+    private Level currentLevel;
     private Ball golfBall;
     private Hole hole;
     private MouseHandler mouseHandler;
 
-    private int score = 0;
+    private int strokes = 0;
+    private int totalStrokes = 0;
 
     public PlayState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -31,22 +33,23 @@ public class PlayState extends State {
     }
 
     private void loadLevel(int index) {
-        Level level = levelManager.getLevel(index);
-        if (level != null) {
-            golfBall = level.getStartBall();
-            hole = level.getHole();
+        currentLevel = levelManager.getLevel(index);
+        if (currentLevel != null) {
+            strokes = 0;
+            golfBall = currentLevel.getStartBall();
+            hole = currentLevel.getHole();
             mouseHandler = new MouseHandler(golfBall, this);
             gameWindow.addMouseListener(mouseHandler);
             gameWindow.addMouseMotionListener(mouseHandler);
         } else {
-            gameWindow.changeState(new GameOverState(gameWindow, score));
+            gameWindow.changeState(new GameOverState(gameWindow, totalStrokes));
         }
     }
 
     @Override
     public void update() {
         if (golfBall != null) {
-            golfBall.update(levelManager.getCurrentLevel().getObstacles());
+            golfBall.update(currentLevel.getObstacles(), currentLevel.getTerrainAreas());
         }
         if (hole != null && golfBall != null && hole.isBallInHole(golfBall)) {
             levelManager.nextLevel();
@@ -71,12 +74,14 @@ public class PlayState extends State {
         }
 
         // Draw score
-        g2d.setColor(Color.WHITE);
-        g2d.drawString("Strokes: " + score, 10, 20);
-        g2d.drawString("Level: " + (levelManager.getCurrentLevelIndex() + 1), 10, 40);
+        g2d.setColor(Color.BLACK);
+        g2d.drawString("Strokes: " + strokes, 10, 20);
+        g2d.drawString("Par: " + currentLevel.getPar(), 10, 40);
+        g2d.drawString("Level: " + currentLevel.getLevelNumber(), 10, 60);
     }
 
     public void incrementScore() {
-        score++;
+        strokes++;
+        totalStrokes++;
     }
 }
