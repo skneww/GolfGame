@@ -2,6 +2,10 @@ package level;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Image;
+import javax.imageio.ImageIO;
+import java.io.IOException;
+
 
 import entity.Ball;
 import entity.Hole;
@@ -37,6 +41,13 @@ public class LevelManager {
         TerrainArea sandTrap1 = new TerrainArea(200, 300, 100, 100, TerrainType.SAND);
         level1.addTerrainArea(sandTrap1);
 
+        try {
+            Image level1background = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
+            level1.setImage(level1background);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
         levels.add(level1);
 
         // Level 2
@@ -57,6 +68,13 @@ public class LevelManager {
 
         TerrainArea waterHazard2 = new TerrainArea(400, 200, 150, 50, TerrainType.WATER);
         level2.addTerrainArea(waterHazard2);
+
+        try {
+            Image level2background = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
+            level2.setImage(level2background);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         
         levels.add(level2);
 
@@ -74,6 +92,15 @@ public class LevelManager {
 
         level3.addObstacle(new Obstacle(450, 250, 20, 150));  
         level3.addObstacle(new Obstacle(300, 400, 170, 20));
+
+        try {
+            Image level3background = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
+            level3.setImage(level3background);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        levels.add(level3);
 
         Level level4 = new Level(4);
         level4.setStartBall(new Ball(50, 300));
@@ -96,6 +123,13 @@ public class LevelManager {
         TerrainArea waterTrap4 = new TerrainArea(300, 350, 100, 100, TerrainType.WATER);
         level4.addTerrainArea(sandTrap4);
         level4.addTerrainArea(waterTrap4);
+
+        try {
+            Image level4background = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
+            level4.setImage(level4background);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         levels.add(level4);
     }

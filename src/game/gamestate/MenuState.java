@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
+import javax.imageio.ImageIO;
+import java.io.IOException;
 import main.GameWindow;
 
 public class MenuState extends State {
@@ -13,6 +15,7 @@ public class MenuState extends State {
     private JButton playButton;
     private JButton settingsButton;
     private JButton exitButton;
+    private Image backgroundImage;
 
     //constructor
     public MenuState(GameWindow gameWindow) {
@@ -21,6 +24,12 @@ public class MenuState extends State {
     
     @Override
     public void init() {
+
+        try {
+            backgroundImage = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         menuPanel = new JPanel();
         menuPanel.setOpaque(false);
         menuPanel.setLayout(new BoxLayout(menuPanel, BoxLayout.Y_AXIS));
@@ -69,8 +78,12 @@ public class MenuState extends State {
 
     @Override
     public void render(Graphics2D g2d) {
-        g2d.setColor(gameWindow.getBackground());
-        g2d.fillRect(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT);
+        if (backgroundImage != null) {
+            g2d.drawImage(backgroundImage, 0, 0, GameWindow.WIDTH, GameWindow.HEIGHT, null);
+        } else {
+            g2d.setColor(gameWindow.getBackground());
+            g2d.fillRect(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT);
+        }
     }
 
     
