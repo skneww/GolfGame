@@ -110,7 +110,6 @@ public class GameWindow extends JPanel implements Runnable {
                 try {
                     Thread.sleep(TARGET_TIME - elapsedTime);
                 } catch (InterruptedException e) {
-                    // TODO: handle exception
                     e.printStackTrace();
                 }
             }

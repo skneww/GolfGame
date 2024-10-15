@@ -2,15 +2,18 @@ package gamestate;
 
 import javax.swing.*;
 import java.awt.*;
+import javax.swing.event.ChangeListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import main.GameWindow;
+import sound.Sound;
 
 public class SettingsState extends State {
 
     private GameWindow gameWindow;
     private JPanel settingsPanel;
     private JButton backButton;
+    private JSlider volumeSlider;
 
     public SettingsState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
@@ -22,7 +25,20 @@ public class SettingsState extends State {
         settingsPanel.setOpaque(false);
         settingsPanel.setLayout(new BoxLayout(settingsPanel, BoxLayout.Y_AXIS));
 
-        // Add settings components here (e.g., checkboxes, sliders)
+        JLabel volumeLabel = new JLabel("Volume");
+        volumeLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
+
+        volumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+        volumeSlider.setAlignmentX(Component.CENTER_ALIGNMENT);
+        volumeSlider.setMaximumSize(new Dimension(200, 50));
+        volumeSlider.addChangeListener(e -> {
+            int volume = volumeSlider.getValue();
+            Sound.setMasterVolume(volume / 100.0f);
+        });
+
+        settingsPanel.add(Box.createVerticalGlue());
+        settingsPanel.add(volumeLabel);
+        settingsPanel.add(volumeSlider);
 
         backButton = new JButton("Back");
         backButton.setAlignmentX(Component.CENTER_ALIGNMENT);
@@ -31,6 +47,8 @@ public class SettingsState extends State {
                 gameWindow.changeState(new MenuState(gameWindow));
             }
         });
+
+
 
         settingsPanel.add(Box.createVerticalGlue());
         settingsPanel.add(backButton);

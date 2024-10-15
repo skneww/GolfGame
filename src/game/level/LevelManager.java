@@ -34,8 +34,8 @@ public class LevelManager {
         level1.addObstacle(new Obstacle(300, 200, 200, 20)); //First middle Obstacle
         level1.addObstacle(new Obstacle(300, 200, 20, 200)); //Second middle Obstacle
 
-        TerrainArea sandTrap = new TerrainArea(200, 300, 100, 100, TerrainType.SAND);
-        level1.addTerrainArea(sandTrap);
+        TerrainArea sandTrap1 = new TerrainArea(200, 300, 100, 100, TerrainType.SAND);
+        level1.addTerrainArea(sandTrap1);
 
         levels.add(level1);
 
@@ -55,8 +55,8 @@ public class LevelManager {
         level2.addObstacle(new Obstacle(550, 150, 20, 300));
         level2.addObstacle(new Obstacle(550, 450, 150, 20));
 
-        TerrainArea waterHazard = new TerrainArea(400, 200, 150, 50, TerrainType.WATER);
-        level2.addTerrainArea(waterHazard);
+        TerrainArea waterHazard2 = new TerrainArea(400, 200, 150, 50, TerrainType.WATER);
+        level2.addTerrainArea(waterHazard2);
         
         levels.add(level2);
 
@@ -74,8 +74,30 @@ public class LevelManager {
 
         level3.addObstacle(new Obstacle(450, 250, 20, 150));  
         level3.addObstacle(new Obstacle(300, 400, 170, 20));
-        
-        levels.add(level3);
+
+        Level level4 = new Level(4);
+        level4.setStartBall(new Ball(50, 300));
+        level4.setHole(new Hole(750, 300));
+        level4.setPar(4);
+
+        //Border
+        level4.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
+        level4.addObstacle(new Obstacle(0, 590, 800, 10)); // Bottom border
+        level4.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
+        level4.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
+
+        //Obstacles
+        level4.addObstacle(new Obstacle(200, 100, 20, 400));
+        level4.addObstacle(new Obstacle(400, 100, 20, 400));
+        level4.addObstacle(new Obstacle(600, 100, 20, 400));
+
+        //Terrain
+        TerrainArea sandTrap4 = new TerrainArea(300, 250, 100, 100, TerrainType.SAND);
+        TerrainArea waterTrap4 = new TerrainArea(300, 350, 100, 100, TerrainType.WATER);
+        level4.addTerrainArea(sandTrap4);
+        level4.addTerrainArea(waterTrap4);
+
+        levels.add(level4);
     }
 
     public Level getCurrentLevel() {
