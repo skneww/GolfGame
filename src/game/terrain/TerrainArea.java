@@ -1,10 +1,8 @@
 package terrain;
 
-import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import terrain.TerrainType;
 
 public class TerrainArea {
     private Rectangle area;

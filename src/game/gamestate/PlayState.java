@@ -9,6 +9,7 @@ import entity.Hole;
 import level.Level;
 import level.LevelManager;
 import input.MouseHandler;
+import sound.*;
 
 public class PlayState extends State {
 
@@ -53,6 +54,9 @@ public class PlayState extends State {
             golfBall.update(currentLevel.getObstacles(), currentLevel.getTerrainAreas());
         }
         if (hole != null && golfBall != null && hole.isBallInHole(golfBall)) {
+            Sound holeSound = new Sound("HoleHit.wav");
+            holeSound.play();
+
             levelManager.nextLevel();
             loadLevel(levelManager.getCurrentLevelIndex());
         }

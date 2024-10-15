@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 
 import entity.Ball;
 import gamestate.PlayState;
+import main.GameWindow;
+import sound.*;
 
 public class MouseHandler extends MouseAdapter {
 
@@ -57,9 +59,28 @@ public class MouseHandler extends MouseAdapter {
             g2d.drawLine(endX, endY, x1, y1);
             g2d.drawLine(endX, endY, x2, y2);
 
+            //PowerBar Visualisation
+            int barWidth = 200;
+            int barHeight = 20;
+            int barX = 10;
+            int barY = GameWindow.HEIGHT - barHeight - 10;
+
+            //Background of bar
+            g2d.setColor(Color.GRAY);
+            g2d.fillRect(barX, barY, barWidth, barHeight);
+
+            //Current power level
+            g2d.setColor(Color.RED);
+            int powerWidth = (int) (barWidth * (power/100));
+            g2d.fillRect(barX, barY, powerWidth, barHeight);
+
+            //Border
+            g2d.setColor(Color.WHITE);
+            g2d.drawRect(barX, barY, barWidth, barHeight);
+
             //Power Level
             g2d.setColor(Color.WHITE);
-            g2d.drawString("Power :" + (int) power + "%" , startX + 10, startY - 10);
+            g2d.drawString("Power :" + (int) power + "%" , barX + barWidth + 10, barY + barHeight - 10);
         }
     }
     
@@ -101,6 +122,9 @@ public class MouseHandler extends MouseAdapter {
 
             golfBall.setVelocity(velocityX, velocityY);
             isDragging = false;
+
+            Sound hitSound = new Sound("golfBallHit.wav");
+            hitSound.play();
 
             //Score increment
             if (playState != null) {
