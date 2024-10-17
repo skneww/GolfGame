@@ -24,7 +24,7 @@ public class LevelManager {
     private void initializeLevels() {
         // Level 1
         Level level1 = new Level(1);
-        level1.setStartBall(new Ball(50,550));
+        level1.setStartBall(new Ball(50,50));
         level1.setHole(new Hole(750,50));
         level1.setPar(3);
 
@@ -34,10 +34,11 @@ public class LevelManager {
         level1.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
         level1.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
 
-        level1.addObstacle(new Obstacle(300, 200, 200, 20)); //First middle Obstacle
-        level1.addObstacle(new Obstacle(300, 200, 20, 200)); //Second middle Obstacle
+        level1.addObstacle(new Obstacle(150, 0, 40, 400));
+        level1.addObstacle(new Obstacle(350, 200, 40, 500));
+        level1.addObstacle(new Obstacle(550, 0, 40, 350));
 
-        TerrainArea sandTrap1 = new TerrainArea(200, 300, 100, 100, TerrainType.SAND);
+        TerrainArea sandTrap1 = new TerrainArea(150, 300, 150, 100, TerrainType.SAND);
         level1.addTerrainArea(sandTrap1);
 
         try {
@@ -47,7 +48,7 @@ public class LevelManager {
             e.printStackTrace();
         }
 
-        levels.add(level1);
+        //levels.add(level1);
 
         // Level 2
         Level level2 = new Level(2);
@@ -61,12 +62,24 @@ public class LevelManager {
         level2.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
         level2.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
 
-        level2.addObstacle(new Obstacle(400, 150, 150, 20));
-        level2.addObstacle(new Obstacle(550, 150, 20, 300));
-        level2.addObstacle(new Obstacle(550, 450, 150, 20));
-
-        TerrainArea waterHazard2 = new TerrainArea(400, 200, 150, 50, TerrainType.WATER);
-        level2.addTerrainArea(waterHazard2);
+        level2.addObstacle(new Obstacle(175,500, 450, 30));
+        level2.addObstacle(new Obstacle(75,470, 100, 30));
+        level2.addObstacle(new Obstacle(625,470, 100, 30));
+        level2.addObstacle(new Obstacle(45,440, 30, 30));
+        level2.addObstacle(new Obstacle(725,440, 30, 30));
+        level2.addObstacle(new Obstacle(75,340, 30, 100));
+        level2.addObstacle(new Obstacle(695,340, 30, 100));
+        level2.addObstacle(new Obstacle(105,110, 30, 230));
+        level2.addObstacle(new Obstacle(665,110, 30, 230));
+        level2.addObstacle(new Obstacle(135,80, 30, 30));
+        level2.addObstacle(new Obstacle(635,80, 30, 30));
+        level2.addObstacle(new Obstacle(165,110, 30, 30));
+        level2.addObstacle(new Obstacle(605,110, 30, 30));
+        level2.addObstacle(new Obstacle(195,140, 30, 30));
+        level2.addObstacle(new Obstacle(575,140, 30, 30));
+        level2.addObstacle(new Obstacle(225,170, 350, 30));
+        level2.addObstacle(new Obstacle(200, 250, 50, 150));
+        level2.addObstacle(new Obstacle(400, 250, 50, 150));
 
         try {
             Image level2background = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
