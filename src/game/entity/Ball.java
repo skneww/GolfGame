@@ -5,18 +5,21 @@ import java.awt.Graphics2D;
 import java.awt.geom.Ellipse2D;
 import java.awt.Rectangle;
 import java.util.List;
+import sound.Sound;
+
 import obstacle.Obstacle;
 import main.GameWindow;
 import terrain.*;
 
-
+// TODO : CHANGE AUDIO FILES FOR WATER SAND AND COLLISION
 public class Ball {
     private double x, y;
     private double xVelocity = 0;
-    private double Yvelocity = 0;
+    private double yVelocity = 0;
     private final double radius = 10;
     private final double DEFAULT_FRICTION = 0.99;
     private final double STOP_THRESHOLD = 0.1;
+    private TerrainType lastTerrainType = TerrainType.GRASS;
 
     public Ball(double x, double y) {
         this.x = x;
@@ -24,51 +27,73 @@ public class Ball {
     }
 
     public void update(List<Obstacle> obstacles, List<TerrainArea> terrainAreas) {  
-        x += xVelocity;
-        y += Yvelocity;
+        int steps = (int) Math.ceil(Math.max(Math.abs(xVelocity), Math.abs(yVelocity)) / radius);
+        steps = Math.max(1, steps);
 
-        double currentFriction = getCurrentFriction(terrainAreas);
+        double stepX = xVelocity / steps;
+        double stepY = yVelocity / steps;
+
+        for (int i = 0; i < steps; i++ ) {
+            x += stepX;
+            y += stepY;
+
+
+            //Wall colisions
+            if (xVelocity != 0) {
+                if (x - radius < 0 || x + radius > GameWindow.WIDTH) {
+                    xVelocity = -xVelocity;
+                    x = Math.max(radius, Math.min(x, GameWindow.WIDTH - radius));
+                } 
+            }
+            if (yVelocity != 0) {
+                if (y - radius < 0 || y + radius > GameWindow.HEIGHT) {
+                    yVelocity = -yVelocity;
+                    y = Math.max(radius, Math.min(y, GameWindow.HEIGHT - radius));
+                }
+            }
+
+            //Obstacle Collision
+            for (Obstacle obstacle : obstacles) { 
+                if (obstacle.checkCollision(this)) {  
+                    handleCollision(obstacle);  
+                }
+            }
+        }
+
+        //Apply Friction
+        TerrainType currentTerrain = getCurrentTerrain(terrainAreas);
+        double currentFriction = currentTerrain.getFriction();
+
+        if (currentTerrain != lastTerrainType) {
+            if (currentTerrain == TerrainType.SAND) {
+                Sound sandSound = new Sound("golfBallHit.wav");
+                sandSound.play();
+            } else if (currentTerrain == TerrainType.WATER) {
+                Sound waterSound = new Sound("golfBallHit.wav");
+                waterSound.play();
+            }
+            lastTerrainType = currentTerrain;
+        }
+
         xVelocity *= currentFriction;
-        Yvelocity *= currentFriction;
+        yVelocity *= currentFriction;
     
         //Stop the ball if it's moving very slowly
-        if (Math.abs(xVelocity) < 0.1) xVelocity = 0;
-        if (Math.abs(Yvelocity) < 0.1) Yvelocity = 0;
-
-        //Wall colisions
-        if (x - radius < 0) {
-            x =  radius;
-            xVelocity = -xVelocity;
+        if (Math.abs(xVelocity) < 0.1) {
+            xVelocity = 0;
         }
-        if (x + radius > GameWindow.WIDTH) {
-            x = GameWindow.WIDTH - radius;
-            xVelocity = -xVelocity;
-        }
-    
-        if (y - radius < 0) {
-            y = radius;
-            Yvelocity = -Yvelocity;  
-        }
-        if (y + radius > GameWindow.HEIGHT) {
-            y = GameWindow.HEIGHT - radius;
-            Yvelocity = -Yvelocity;
-        }
-
-        //Obstacle Collision
-        for (Obstacle obstacle : obstacles) { 
-            if (obstacle.checkCollision(this)) {  
-                handleCollision(obstacle);  
-            }
+        if (Math.abs(yVelocity) < 0.1) { 
+            yVelocity = 0;
         }
     }
 
-    private double getCurrentFriction(List<TerrainArea> terrainAreas) {
+    private TerrainType getCurrentTerrain(List<TerrainArea> terrainAreas) {
         for (TerrainArea terrainArea : terrainAreas) {
             if (terrainArea.getArea().contains(x,y)) {
-                return terrainArea.getTerrainType().getFriction();
+                return terrainArea.getTerrainType();
             }
         }
-        return DEFAULT_FRICTION;
+        return TerrainType.GRASS;
     }
 
     public void draw(Graphics2D g2d) {
@@ -93,13 +118,13 @@ public class Ball {
         this.y = y;
     }
 
-    public void setVelocity(double xVelocity, double Yvelocity) {
+    public void setVelocity(double xVelocity, double yVelocity) {
         this.xVelocity = xVelocity;
-        this.Yvelocity = Yvelocity;
+        this.yVelocity = yVelocity;
     }
 
     public boolean isMoving() {
-        return Math.sqrt(xVelocity * xVelocity + Yvelocity * Yvelocity) > STOP_THRESHOLD;
+        return Math.sqrt(xVelocity * xVelocity + yVelocity * yVelocity) > STOP_THRESHOLD;
     }
 
     private double clamp(double value, double min, double max) {
@@ -127,7 +152,7 @@ public class Ball {
             //Prevent division by zero
             if (distance == 0) {
                 distanceX = xVelocity;
-                distanceY = Yvelocity;
+                distanceY = yVelocity;
                 distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
             }
 
@@ -140,14 +165,20 @@ public class Ball {
             y += nY * overlap;
 
             //reverse velocity
-            double dotProduct = xVelocity * nX + Yvelocity * nY;
+            double dotProduct = xVelocity * nX + yVelocity * nY;
             xVelocity -= 2 * dotProduct * nX;
-            Yvelocity -= 2 * dotProduct * nY;
+            yVelocity -= 2 * dotProduct * nY;
 
             //DEFAULT_FRICTION
             xVelocity *= DEFAULT_FRICTION;
-            Yvelocity *= DEFAULT_FRICTION;
+            yVelocity *= DEFAULT_FRICTION;
+
+            Sound wallHitSound = new Sound("golfBallHit.wav");
+            wallHitSound.play();
         }
+
+        xVelocity *= 0.9;
+        yVelocity *= 0.9;
     }
 
     // Return the bounding box of the ball

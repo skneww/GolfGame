@@ -34,16 +34,17 @@ public class MouseHandler extends MouseAdapter {
 
     public void draw(Graphics2D g2d) {
         if (isDragging && !golfBall.isMoving()) {
-            //arrow coordinates
-            double deltaX = currentMouseX - pressX;
-            double deltaY = currentMouseY - pressY;
+
+            //Arrow coordinates
+            double deltaX = currentMouseX - golfBall.getX();
+            double deltaY = currentMouseY - golfBall.getY();
             double angle = Math.atan2(deltaY, deltaX);
             double arrowLength = power * 2; //can change for scale;
 
-            int startX = (int) pressX;
-            int startY = (int) pressY;
-            int endX = (int) (pressX - Math.cos(angle) * arrowLength);
-            int endY = (int) (pressY - Math.sin(angle) * arrowLength);
+            int startX = (int) golfBall.getX();
+            int startY = (int) golfBall.getY();
+            int endX = (int) (startX - Math.cos(angle) * arrowLength);
+            int endY = (int) (startY - Math.sin(angle) * arrowLength);
 
             //Draw arrow line
             g2d.setColor(Color.RED);
@@ -95,8 +96,6 @@ public class MouseHandler extends MouseAdapter {
 
             if (distance <= golfBall.getRadius()) {
                 canDrag = true;
-                pressX = e.getX();
-                pressY = e.getY();
                 isDragging = true;
                 currentMouseX = e.getX();
                 currentMouseY = e.getY();
@@ -107,43 +106,46 @@ public class MouseHandler extends MouseAdapter {
     }
 
     @Override
-    public void mouseReleased(MouseEvent e) {
-        if (!golfBall.isMoving() && isDragging && canDrag) {
-            double deltaX = pressX - e.getX();
-            double deltaY = pressY - e.getY();
-            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-            double maxDistance = 200;
-            power = Math.min(distance / maxDistance * 100, 100);
-
-            double angle = Math.atan2(deltaY, deltaX);
-            double velocity = power * 0.2; //0.2 scaling factor
-            double velocityX = Math.cos(angle) * velocity;
-            double velocityY = Math.sin(angle) * velocity;
-
-            golfBall.setVelocity(velocityX, velocityY);
-            isDragging = false;
-
-            Sound hitSound = new Sound("golfBallHit.wav");
-            hitSound.play();
-
-            //Score increment
-            if (playState != null) {
-                playState.incrementScore();
-            }
-        }
-    }
-
-    @Override 
     public void mouseDragged(MouseEvent e) {
         if (isDragging && !golfBall.isMoving() && canDrag) {
             currentMouseX = e.getX();
             currentMouseY = e.getY();
 
-            double deltaX = pressX - currentMouseX;
-            double deltaY = pressY - currentMouseY;
+            double deltaX = currentMouseX - golfBall.getX();
+            double deltaY = currentMouseY - golfBall.getY();
             double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
             double maxDistance = 200;
-            power = Math.min(distance / maxDistance * 100 , 100);
+            power = Math.min(distance / maxDistance * 100, 100);
         }
+}
+
+    @Override
+    public void mouseReleased(MouseEvent e) {
+        if (!golfBall.isMoving() && isDragging && canDrag) {
+            double deltaX = currentMouseX - golfBall.getX();
+            double deltaY = currentMouseY - golfBall.getY();
+            double distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+            double maxDistance = 200;
+            power = Math.min(distance / maxDistance * 100, 100);
+
+            double angle = Math.atan2(deltaY, deltaX);
+            double velocity = power * 0.15f; // scaling factor
+
+            // Set velocity in the same direction as the arrow
+            double velocityX = -Math.cos(angle) * velocity;
+            double velocityY = -Math.sin(angle) * velocity;
+
+            golfBall.setVelocity(velocityX, velocityY);
+            isDragging = false;
+
+            // Play sound and increment score
+            Sound hitSound = new Sound("golfBallHit.wav");
+            hitSound.play();
+
+            if (playState != null) {
+                playState.incrementScore();
+            }
     }
+}
+
 }
