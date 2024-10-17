@@ -15,7 +15,7 @@ public class Obstacle {
     private int height;
     private boolean isTriangle;
 
-    public Obstacle (int x,int y,int width, int height){
+    public Obstacle(int x,int y,int width, int height){
         this.x = x;
         this.y = y;
         this.width = width;
@@ -23,7 +23,7 @@ public class Obstacle {
         this.isTriangle = false;
     }
     
-    public Obstacle (int x,int y,int width, int height, boolean isTriangle){
+    public Obstacle(int x,int y,int width, int height, boolean isTriangle){
         this.x = x;
         this.y = y;
         this.width = width;

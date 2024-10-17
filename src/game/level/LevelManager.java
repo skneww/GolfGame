@@ -5,12 +5,11 @@ import java.util.List;
 import java.awt.Image;
 import javax.imageio.ImageIO;
 import java.io.IOException;
-
-
 import entity.Ball;
 import entity.Hole;
 import obstacle.Obstacle;
 import terrain.*;
+
 public class LevelManager {
 
     private List<Level> levels;
