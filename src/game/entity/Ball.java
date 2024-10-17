@@ -76,8 +76,8 @@ public class Ball {
                 }
             }
 
-            xVelocity *= currentFriction;
-            yVelocity *= currentFriction;
+            xVelocity *= frictionPerStep;
+            yVelocity *= frictionPerStep;
         }
     
         //Stop the ball if it's moving very slowly
