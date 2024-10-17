@@ -26,7 +26,7 @@ public class MenuState extends State {
     public void init() {
 
         try {
-            backgroundImage = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
+            backgroundImage = ImageIO.read(getClass().getResource("/resources/backgrounds/MenuBackground.png"));
         } catch (IOException e) {
             e.printStackTrace();
         }

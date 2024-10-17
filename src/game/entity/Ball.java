@@ -11,14 +11,17 @@ import obstacle.Obstacle;
 import main.GameWindow;
 import terrain.*;
 
-// TODO : CHANGE AUDIO FILES FOR WATER SAND AND COLLISION
 public class Ball {
-    private double x, y;
+    private double x;
+    private double y;
     private double xVelocity = 0;
     private double yVelocity = 0;
     private final double radius = 10;
+
     private final double DEFAULT_FRICTION = 0.99;
     private final double STOP_THRESHOLD = 0.1;
+    private final double WALL_RESTITUTION = 0.8;
+
     private TerrainType lastTerrainType = TerrainType.GRASS;
 
     public Ball(double x, double y) {
@@ -26,29 +29,43 @@ public class Ball {
         this.y = y;
     }
 
-    public void update(List<Obstacle> obstacles, List<TerrainArea> terrainAreas) {  
+    public void update(List<Obstacle> obstacles, List<TerrainArea> terrainAreas) {
+        //calculate number of steps for tunneling prevention
         int steps = (int) Math.ceil(Math.max(Math.abs(xVelocity), Math.abs(yVelocity)) / radius);
         steps = Math.max(1, steps);
 
-        double stepX = xVelocity / steps;
-        double stepY = yVelocity / steps;
+        //find out current terrain and calculate friction per step
+        TerrainType currentTerrain = getCurrentTerrain(terrainAreas);
+        double currentFriction = currentTerrain.getFriction();
+        double frictionPerStep = Math.pow(currentFriction, 1.0/steps);
+
+        if (currentTerrain != lastTerrainType) {
+            if (currentTerrain == TerrainType.SAND) {
+                Sound sandSound = new Sound("sand-hit.wav");
+                sandSound.play();
+            } else if (currentTerrain == TerrainType.WATER) {
+                Sound waterSound = new Sound("waterhit.wav");
+                waterSound.play();
+            }
+            lastTerrainType = currentTerrain;
+        }
 
         for (int i = 0; i < steps; i++ ) {
-            x += stepX;
-            y += stepY;
-
+            //Update the velocity 
+            x += xVelocity / steps;
+            y += yVelocity / steps;
 
             //Wall colisions
             if (xVelocity != 0) {
                 if (x - radius < 0 || x + radius > GameWindow.WIDTH) {
-                    xVelocity = -xVelocity;
-                    x = Math.max(radius, Math.min(x, GameWindow.WIDTH - radius));
+                    xVelocity = -xVelocity * WALL_RESTITUTION;
+                    x = clamp(x, radius, GameWindow.WIDTH - radius);
                 } 
             }
             if (yVelocity != 0) {
                 if (y - radius < 0 || y + radius > GameWindow.HEIGHT) {
                     yVelocity = -yVelocity;
-                    y = Math.max(radius, Math.min(y, GameWindow.HEIGHT - radius));
+                    y = clamp(y, radius, GameWindow.HEIGHT - radius);
                 }
             }
 
@@ -58,25 +75,10 @@ public class Ball {
                     handleCollision(obstacle);  
                 }
             }
+
+            xVelocity *= currentFriction;
+            yVelocity *= currentFriction;
         }
-
-        //Apply Friction
-        TerrainType currentTerrain = getCurrentTerrain(terrainAreas);
-        double currentFriction = currentTerrain.getFriction();
-
-        if (currentTerrain != lastTerrainType) {
-            if (currentTerrain == TerrainType.SAND) {
-                Sound sandSound = new Sound("golfBallHit.wav");
-                sandSound.play();
-            } else if (currentTerrain == TerrainType.WATER) {
-                Sound waterSound = new Sound("golfBallHit.wav");
-                waterSound.play();
-            }
-            lastTerrainType = currentTerrain;
-        }
-
-        xVelocity *= currentFriction;
-        yVelocity *= currentFriction;
     
         //Stop the ball if it's moving very slowly
         if (Math.abs(xVelocity) < 0.1) {
@@ -147,33 +149,56 @@ public class Ball {
         if (distanceSquared < radius * radius) {
 
             double distance = Math.sqrt(distanceSquared);
-            double overlap = radius - distance;
 
             //Prevent division by zero
             if (distance == 0) {
                 distanceX = xVelocity;
                 distanceY = yVelocity;
                 distance = Math.sqrt(distanceX * distanceX + distanceY * distanceY);
+                if (distance == 0) {
+                    return;
+                }
+                distanceX = xVelocity / distance;
+                distanceY = yVelocity / distance;
             }
 
             //normal vector
             double nX = distanceX/distance;
             double nY = distanceY/distance;
 
+            double overlap = radius - distance;
+
             //remove ball from obstacle
             x += nX * overlap;
             y += nY * overlap;
 
-            //reverse velocity
+            /*//reverse velocity
             double dotProduct = xVelocity * nX + yVelocity * nY;
             xVelocity -= 2 * dotProduct * nX;
             yVelocity -= 2 * dotProduct * nY;
 
             //DEFAULT_FRICTION
             xVelocity *= DEFAULT_FRICTION;
-            yVelocity *= DEFAULT_FRICTION;
+            yVelocity *= DEFAULT_FRICTION;*/
 
-            Sound wallHitSound = new Sound("golfBallHit.wav");
+            //new 
+            double relVelX = xVelocity;
+            double relVelY = yVelocity;
+
+            double velAlongNormal = relVelX * nX + relVelY * nY;
+
+            if (velAlongNormal > 0) {
+                return;
+            }
+
+            double restitution = WALL_RESTITUTION;
+            double impulse = -(1 + restitution) * velAlongNormal;
+
+            //Add impulse to velocity
+            xVelocity += impulse * nX;
+            yVelocity += impulse * nY;
+
+            Sound wallHitSound = new Sound("wallhit.wav");
             wallHitSound.play();
         }
 

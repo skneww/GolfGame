@@ -129,7 +129,7 @@ public class MouseHandler extends MouseAdapter {
             power = Math.min(distance / maxDistance * 100, 100);
 
             double angle = Math.atan2(deltaY, deltaX);
-            double velocity = power * 0.15f; // scaling factor
+            double velocity = power * 0.2f; // scaling factor
 
             // Set velocity in the same direction as the arrow
             double velocityX = -Math.cos(angle) * velocity;

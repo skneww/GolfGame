@@ -48,7 +48,7 @@ public class LevelManager {
             e.printStackTrace();
         }
 
-        //levels.add(level1);
+        levels.add(level1);
 
         // Level 2
         Level level2 = new Level(2);
