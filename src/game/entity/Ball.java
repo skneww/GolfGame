@@ -40,7 +40,7 @@ public class Ball {
             x =  radius;
             xVelocity = -xVelocity;
         }
-        if (x+radius > GameWindow.WIDTH) {
+        if (x + radius > GameWindow.WIDTH) {
             x = GameWindow.WIDTH - radius;
             xVelocity = -xVelocity;
         }
