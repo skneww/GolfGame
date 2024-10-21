@@ -9,11 +9,23 @@ public class Hole {
     private double y;  // Added y position
     private static final double radius = 13; // Changed to constant, only one instance
 
+    /**
+     * Constructs a Hole at the specified position.
+     *
+     * @param x the x-coordinate of the hole
+     * @param y the y-coordinate of the hole
+     */
     public Hole(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Checks if the ball is in the hole.
+     *
+     * @param ball the Ball to check
+     * @return true if the ball is in the hole, false otherwise
+     */
     public boolean isBallInHole(Ball ball) {
         double ballX = ball.getX();
         double ballY = ball.getY();

@@ -23,6 +23,12 @@ public class MouseHandler extends MouseAdapter {
     private double power;
     
 
+    /**
+    * Constructs a MouseHandler for the given Ball and PlayState.
+    *
+    * @param ball the Ball to control
+    * @param playState the PlayState for updating score
+    */
     public MouseHandler(Ball ball, PlayState playState) {
         this.golfBall = ball;
         this.playState = playState;
@@ -32,6 +38,11 @@ public class MouseHandler extends MouseAdapter {
         return isDragging;
     }
 
+    /**
+    * Draws the power arrow and power bar while dragging.
+    * 
+    * @param g2d the Graphics2D context to draw on
+    */
     public void draw(Graphics2D g2d) {
         if (isDragging && !golfBall.isMoving()) {
 
@@ -84,7 +95,12 @@ public class MouseHandler extends MouseAdapter {
             g2d.drawString("Power :" + (int) power + "%" , barX + barWidth + 10, barY + barHeight - 10);
         }
     }
-    
+    /**
+    * Invoked when the mouse is dragged while a mouse button is pressed.
+    * Updates the current mouse position and calculates the power based on the drag distance.
+    *
+    * @param e the MouseEvent containing information about the mouse drag
+    */
     @Override 
     public void mousePressed(MouseEvent e) {
         if (!golfBall.isMoving()) {
@@ -104,7 +120,13 @@ public class MouseHandler extends MouseAdapter {
             }
         }
     }
-
+    /**
+    * Invoked when a mouse button has been released.
+    * Calculates the final power and angle based on the drag distance,
+    * sets the ball's velocity accordingly.
+    *
+    * @param e the MouseEvent containing information about the mouse release
+    */
     @Override
     public void mouseDragged(MouseEvent e) {
         if (isDragging && !golfBall.isMoving() && canDrag) {

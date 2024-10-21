@@ -15,12 +15,18 @@ public class LevelManager {
     private List<Level> levels;
     private int currentLevelIndex;
 
+    /**
+    * Constructs a LevelManager and initializes the levels.
+    */
     public LevelManager() {
         levels = new ArrayList<>();
         initializeLevels();
         currentLevelIndex = 0;
     }
 
+    /**
+    * Initializes the levels by creating Level objects and adding them to the list.
+    */
     private void initializeLevels() {
         // Level 1
         Level level1 = new Level(1);
@@ -28,12 +34,8 @@ public class LevelManager {
         level1.setHole(new Hole(750,50));
         level1.setPar(3);
 
-        //Border
-        level1.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
-        level1.addObstacle(new Obstacle(0, 590, 800, 10)); // Bottom border
-        level1.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
-        level1.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
-
+        addBorders(level1);
+        
         level1.addObstacle(new Obstacle(150, 0, 40, 400));
         level1.addObstacle(new Obstacle(350, 200, 40, 500));
         level1.addObstacle(new Obstacle(550, 0, 40, 350));
@@ -56,11 +58,7 @@ public class LevelManager {
         level2.setHole(new Hole(750, 50));
         level2.setPar(4);
 
-        //Border
-        level2.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
-        level2.addObstacle(new Obstacle(0, 590, 800, 10)); // Bottom border
-        level2.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
-        level2.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
+        addBorders(level2);
 
         level2.addObstacle(new Obstacle(175,500, 450, 30));
         level2.addObstacle(new Obstacle(75,470, 100, 30));
@@ -96,11 +94,7 @@ public class LevelManager {
         level3.setHole(new Hole(400, 50));
         level3.setPar(5);
 
-        //Border
-        level3.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
-        level3.addObstacle(new Obstacle(0, 590, 800, 10)); // Bottom border
-        level3.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
-        level3.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
+        addBorders(level3);
 
         level3.addObstacle(new Obstacle(450, 250, 20, 150));  
         level3.addObstacle(new Obstacle(300, 400, 170, 20));
@@ -119,11 +113,7 @@ public class LevelManager {
         level4.setHole(new Hole(750, 300));
         level4.setPar(4);
 
-        //Border
-        level4.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
-        level4.addObstacle(new Obstacle(0, 590, 800, 10)); // Bottom border
-        level4.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
-        level4.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
+        addBorders(level4);
 
         //Obstacles
         level4.addObstacle(new Obstacle(200, 100, 20, 400));
@@ -144,6 +134,18 @@ public class LevelManager {
         }
 
         levels.add(level4);
+    }
+
+    /**
+    * Adds border obstacles to a level.
+    *
+    * @param level the Level to add borders to
+    */
+    private void addBorders(Level level) {
+        level.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
+        level.addObstacle(new Obstacle(0, 590, 800, 10)); // Bottom border
+        level.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
+        level.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
     }
 
     public Level getCurrentLevel() {

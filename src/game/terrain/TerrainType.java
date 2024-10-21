@@ -10,6 +10,12 @@ public enum TerrainType {
     private final double friction;
     private final Color color;
 
+    /**
+    * Constructs a TerrainType with specified friction and color.
+    *
+    * @param friction the friction coefficient of the terrain
+    * @param color the color representing the terrain
+    */
     TerrainType(double friction, Color color) {
         this.friction = friction;
         this.color = color;

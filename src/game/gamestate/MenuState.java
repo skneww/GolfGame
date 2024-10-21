@@ -17,11 +17,19 @@ public class MenuState extends State {
     private JButton exitButton;
     private Image backgroundImage;
 
-    //constructor
+    /**
+     * Constructs a MenuState with the specified GameWindow.
+     *
+     * @param gameWindow the main game window
+     */
     public MenuState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
     }
     
+    /**
+     * Initializes the main menu screen with the background image,
+     * the play, settings and exit button.
+     */
     @Override
     public void init() {
 

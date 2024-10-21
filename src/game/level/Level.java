@@ -22,6 +22,11 @@ public class Level {
     private List<TerrainArea> terrainAreas;
     private Image backgroundImage;
 
+    /**
+    * Constructs a new Level with the specified level number.
+    *
+    * @param levelNumber the number of the level
+    */
     public Level(int levelNumber) {
         this.levelNumber = levelNumber;
         obstacles = new ArrayList<>();
@@ -76,6 +81,11 @@ public class Level {
         return hole;
     }
 
+    /**
+    * Renders the level, drawing the background, terrain areas, and obstacles.
+    *
+    * @param g2d the Graphics2D context to draw on
+    */
     public void render(Graphics2D g2d) {
         if (backgroundImage != null) {
             g2d.drawImage(backgroundImage, 0, 0, GameWindow.WIDTH, GameWindow.HEIGHT, null);

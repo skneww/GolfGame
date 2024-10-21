@@ -23,17 +23,32 @@ public class PlayState extends State {
     private int strokes = 0;
     private int totalStrokes = 0;
 
+    /**
+    * Constructs a PlayState with the specified GameWindow.
+    *
+    * @param gameWindow the main game window
+    */
     public PlayState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
         init();
     }
 
+    /**
+     * 
+     * Starts the level manager
+     * 
+     */
     @Override
     public void init() {
         levelManager = new LevelManager();
         loadLevel(0);
     }
 
+    /**
+    * Loads the level at the specified index.
+    *
+    * @param index the index of the level to load
+    */
     private void loadLevel(int index) {
         currentLevel = levelManager.getLevel(index);
         if (currentLevel != null) {
@@ -68,12 +83,18 @@ public class PlayState extends State {
         g2d.fillRect(0, 0, GameWindow.WIDTH, GameWindow.HEIGHT);
 
         levelManager.getCurrentLevel().render(g2d);
+
+        //Draw the ball
         if (golfBall != null) {
             golfBall.draw(g2d);
         }
+
+        // Draw the hole
         if (hole != null) {
             hole.draw(g2d);
         }
+
+        // Draw the mouse handler visuals if dragging
         if (mouseHandler != null && mouseHandler.isDragging()) {
             mouseHandler.draw(g2d);
         }
@@ -85,6 +106,9 @@ public class PlayState extends State {
         g2d.drawString("Level: " + currentLevel.getLevelNumber(), 10, 60);
     }
 
+    /**
+    * Increments the stroke count for the current level and total strokes.
+    */
     public void incrementScore() {
         strokes++;
         totalStrokes++;

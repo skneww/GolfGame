@@ -13,12 +13,21 @@ public class GameOverState extends State {
     private JButton menuButton;
     private JButton exitButton;
     private int finalScore;
-
+    /**
+     * Constructs a GameOverState with the specified GameWindow and final score.
+     *
+     * @param gameWindow the main game window
+     * @param finalScore the player's final score
+     */
     public GameOverState(GameWindow gameWindow, int finalScore) {
         this.gameWindow = gameWindow;
         this.finalScore = finalScore;
     }
-
+    
+    /**
+     * Initializes the Game Over screen with it's 
+     * background image, and the exit and main menu buttons
+     */
     @Override
     public void init() {
         gameOverPanel = new JPanel();

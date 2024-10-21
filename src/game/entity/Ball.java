@@ -24,11 +24,23 @@ public class Ball {
 
     private TerrainType lastTerrainType = TerrainType.GRASS;
 
+    /**
+     * Constructs a Ball at the specified position.
+     *
+     * @param x the x-coordinate of the ball
+     * @param y the y-coordinate of the ball
+     */
     public Ball(double x, double y) {
         this.x = x;
         this.y = y;
     }
 
+    /**
+     * Updates the ball's position, velocity, and handles collisions.
+     *
+     * @param obstacles the list of Obstacles to check collisions with
+     * @param terrainAreas the list of TerrainAreas to determine friction
+     */
     public void update(List<Obstacle> obstacles, List<TerrainArea> terrainAreas) {
         //calculate number of steps for tunneling prevention
         int steps = (int) Math.ceil(Math.max(Math.abs(xVelocity), Math.abs(yVelocity)) / radius);
@@ -133,6 +145,11 @@ public class Ball {
         return Math.max(min, Math.min(max, value));
     }
 
+    /**
+     * Handles collision with an obstacle.
+     *
+     * @param obstacle the Obstacle collided with
+     */
     private void handleCollision(Obstacle obstacle) {
         Rectangle rect = obstacle.getBounds();
 
@@ -143,7 +160,6 @@ public class Ball {
         //circle center to point
         double distanceX = x - closestX;
         double distanceY = y - closestY;
-
         double distanceSquared = distanceX * distanceX + distanceY * distanceY;
 
         if (distanceSquared < radius * radius) {
@@ -172,15 +188,6 @@ public class Ball {
             x += nX * overlap;
             y += nY * overlap;
 
-            /*//reverse velocity
-            double dotProduct = xVelocity * nX + yVelocity * nY;
-            xVelocity -= 2 * dotProduct * nX;
-            yVelocity -= 2 * dotProduct * nY;
-
-            //DEFAULT_FRICTION
-            xVelocity *= DEFAULT_FRICTION;
-            yVelocity *= DEFAULT_FRICTION;*/
-
             //new 
             double relVelX = xVelocity;
             double relVelY = yVelocity;
@@ -206,7 +213,11 @@ public class Ball {
         yVelocity *= 0.9;
     }
 
-    // Return the bounding box of the ball
+    /**
+     * Gets the bounding rectangle of the ball.
+     *
+     * @return a Rectangle representing the bounds
+     */
     public Rectangle getBounds() {
         return new Rectangle((int) (x - radius), (int) (y - radius), (int) (radius * 2), (int) (radius * 2));
     }

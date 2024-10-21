@@ -14,10 +14,21 @@ public class SettingsState extends State {
     private JButton backButton;
     private JSlider volumeSlider;
 
+    /**
+    * Constructs a SettingsState with the specified GameWindow.
+    *
+    * @param gameWindow the main game window
+    */
     public SettingsState(GameWindow gameWindow) {
         this.gameWindow = gameWindow;
     }
 
+    /**
+    * 
+    * Initializes the settings window with the volume slider as well
+    * as back button to return to main menu
+    *
+    */
     @Override
     public void init() {
         settingsPanel = new JPanel();
