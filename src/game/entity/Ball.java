@@ -53,10 +53,10 @@ public class Ball {
 
         if (currentTerrain != lastTerrainType) {
             if (currentTerrain == TerrainType.SAND) {
-                Sound sandSound = new Sound("sand-hit.wav");
+                Sound sandSound = new Sound("sand-hitCon.wav");
                 sandSound.play();
             } else if (currentTerrain == TerrainType.WATER) {
-                Sound waterSound = new Sound("waterhit.wav");
+                Sound waterSound = new Sound("waterhitCon.wav");
                 waterSound.play();
             }
             lastTerrainType = currentTerrain;
@@ -205,7 +205,7 @@ public class Ball {
             xVelocity += impulse * nX;
             yVelocity += impulse * nY;
 
-            Sound wallHitSound = new Sound("wallhit.wav");
+            Sound wallHitSound = new Sound("wallhitCon.wav");
             wallHitSound.play();
         }
 

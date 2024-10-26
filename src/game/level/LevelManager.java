@@ -54,9 +54,10 @@ public class LevelManager {
 
         // Level 2
         Level level2 = new Level(2);
-        level2.setStartBall(new Ball(50, 550));
-        level2.setHole(new Hole(750, 50));
+        level2.setStartBall(new Ball(150, 450));
+        level2.setHole(new Hole(650, 150));
         level2.setPar(4);
+
 
         addBorders(level2);
 
@@ -94,10 +95,22 @@ public class LevelManager {
         level3.setHole(new Hole(400, 50));
         level3.setPar(5);
 
-        addBorders(level3);
+        //Border
+        level3.addObstacle(new Obstacle(0, 0, 800, 10));  // Top border
+        level3.addObstacle(new Obstacle(0, 590, 800, 10)); // Bottom border
+        level3.addObstacle(new Obstacle(0, 0, 10, 600));  // Left border
+        level3.addObstacle(new Obstacle(790, 0, 10, 600)); // Right border
 
-        level3.addObstacle(new Obstacle(450, 250, 20, 150));  
-        level3.addObstacle(new Obstacle(300, 400, 170, 20));
+        level3.addObstacle(new Obstacle(450, 400, 20, 30));  
+        level3.addObstacle(new Obstacle(450, 0, 20, 150)); 
+        level3.addObstacle(new Obstacle(280, 400, 180, 20));
+        level3.addObstacle(new Obstacle(260, 490, 20, 300));
+        level3.addObstacle(new Obstacle(260, 0, 20, 90));
+        level3.addObstacle(new Obstacle(260, 400, 20, 30));
+        level3.addObstacle(new Obstacle(260, 150, 20, 260));
+
+        level3.addTerrainArea(new TerrainArea(230, 430, 80, 60, TerrainType.SAND));
+        level3.addTerrainArea(new TerrainArea(470, 400, 400, 60, TerrainType.WATER));
 
         try {
             Image level3background = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
@@ -109,22 +122,28 @@ public class LevelManager {
         levels.add(level3);
 
         Level level4 = new Level(4);
-        level4.setStartBall(new Ball(50, 300));
-        level4.setHole(new Hole(750, 300));
-        level4.setPar(4);
+        level4.setStartBall(new Ball(150, 460)); 
+        level4.setHole(new Hole(750, 50));   
+        level4.setPar(6);                       
 
         addBorders(level4);
 
-        //Obstacles
-        level4.addObstacle(new Obstacle(200, 100, 20, 400));
-        level4.addObstacle(new Obstacle(400, 100, 20, 400));
-        level4.addObstacle(new Obstacle(600, 100, 20, 400));
+        level4.addObstacle(new Obstacle(150, 530, 500, 40));
+        level4.addObstacle(new Obstacle(150, 210, 500, 40));
+        level4.addObstacle(new Obstacle(110, 490, 40, 40));
+        level4.addObstacle(new Obstacle(110, 250, 40, 120));
+        level4.addObstacle(new Obstacle(70, 370, 40, 120));
+        level4.addObstacle(new Obstacle(650, 410, 40, 120));
+        //level4.addObstacle(new Obstacle(690, 370, 40, 40));
+        level4.addObstacle(new Obstacle(650, 250, 40, 120));
+        level4.addObstacle(new Obstacle(550, 300, 60, 60));
+        level4.addObstacle(new Obstacle(250, 350, 40, 100));
+        level4.addObstacle(new Obstacle(190, 410, 100, 40));
+        
 
-        //Terrain
-        TerrainArea sandTrap4 = new TerrainArea(300, 250, 100, 100, TerrainType.SAND);
-        TerrainArea waterTrap4 = new TerrainArea(300, 350, 100, 100, TerrainType.WATER);
-        level4.addTerrainArea(sandTrap4);
-        level4.addTerrainArea(waterTrap4);
+        level4.addTerrainArea(new TerrainArea(650, 370, 40, 40, TerrainType.SAND));
+        //level4.addTerrainArea(new TerrainArea(500, 400, 150, 60, TerrainType.SAND));
+        level4.addTerrainArea(new TerrainArea(0, 560, 800, 40, TerrainType.WATER));
 
         try {
             Image level4background = ImageIO.read(getClass().getResource("/resources/backgrounds/GolfBackground.png"));
@@ -134,6 +153,7 @@ public class LevelManager {
         }
 
         levels.add(level4);
+
     }
 
     /**

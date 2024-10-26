@@ -161,7 +161,7 @@ public class MouseHandler extends MouseAdapter {
             isDragging = false;
 
             // Play sound and increment score
-            Sound hitSound = new Sound("golfBallHit.wav");
+            Sound hitSound = new Sound("golfBallHitCon.wav");
             hitSound.play();
 
             if (playState != null) {

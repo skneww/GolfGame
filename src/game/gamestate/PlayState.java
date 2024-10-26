@@ -69,7 +69,7 @@ public class PlayState extends State {
             golfBall.update(currentLevel.getObstacles(), currentLevel.getTerrainAreas());
         }
         if (hole != null && golfBall != null && hole.isBallInHole(golfBall)) {
-            Sound holeSound = new Sound("HoleHit.wav");
+            Sound holeSound = new Sound("HoleHitCon.wav");
             holeSound.play();
 
             levelManager.nextLevel();
